@@ -29,6 +29,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const UserRegSchema = z.object({
     email: z.string().email("This is not a valid email."),
     password: z.string().min(3),
+    username: z.string().min(3),
   });
 
   type UserRegSchemaType = z.infer<typeof UserRegSchema>;
@@ -60,6 +61,19 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-2">
             {/* Email Field */}
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input type="text" {...field} disabled={isLoading} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"
@@ -102,7 +116,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Signup with Email
+              Sign In with Email
             </Button>
           </div>
         </form>
