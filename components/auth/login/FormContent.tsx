@@ -49,7 +49,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     try {
       const res = await AxiosInstance.post("/auth/login", data);
-      console.log(res.data);
       if (res.data.success) {
         dispatch(
           userdata({
