@@ -15,10 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className="flex flex-col min-h-screen">
         <ReduxProvider>
           <Header />
-          {children}
+          <main className="flex-1 relative z-0">{children}</main>
         </ReduxProvider>
       </body>
     </html>
