@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,8 +19,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card } from "@/components/ui/card";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -35,6 +32,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   type UserRegSchemaType = z.infer<typeof UserRegSchema>;
   const form = useForm<UserRegSchemaType>({
     resolver: zodResolver(UserRegSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+    },
   });
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -66,13 +68,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Username*</FormLabel>
                   <FormControl>
                     <Input
                       type="text"
                       {...field}
                       placeholder="username"
-                      disabled={isLoading}
                       required
                     />
                   </FormControl>
@@ -85,13 +86,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email*</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder="m@exp.com"
                       {...field}
-                      disabled={isLoading}
                       required
                     />
                   </FormControl>
@@ -105,13 +105,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Password*</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="password"
                       {...field}
-                      disabled={isLoading}
                       required
                     />
                   </FormControl>
