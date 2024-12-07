@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const instance = axios.create({
-  baseURL: process.env.LARAVEL_BACKEND_URL as string,
-  timeout: 8000,
+const AxiosInstance = axios.create({
+  baseURL: "http://backend-laravel.test/api",
   headers: {
     Accept: "application/json",
   },
 });
 
-export default instance;
+export default AxiosInstance;

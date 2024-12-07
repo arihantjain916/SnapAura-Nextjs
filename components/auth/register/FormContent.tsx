@@ -19,6 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import AxiosInstance from "@/lib/axiosInstance";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -42,6 +43,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   async function onSubmit(data: UserRegSchemaType) {
     setIsLoading(true);
+
+    const res = await AxiosInstance.post("/auth/register", data);
+    console.log(res);
+
     form.reset();
 
     setTimeout(() => {

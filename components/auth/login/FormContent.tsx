@@ -10,6 +10,7 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import AxiosInstance from "@/lib/axiosInstance";
 
 import {
   Form,
@@ -40,6 +41,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   async function onSubmit(data: UserRegSchemaType) {
     setIsLoading(true);
+
+    const res = await AxiosInstance.post("/auth/login", data);
+    console.log(res.data);
     form.reset();
 
     setTimeout(() => {
