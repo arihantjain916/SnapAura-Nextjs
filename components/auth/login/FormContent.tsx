@@ -49,16 +49,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     try {
       const res = await AxiosInstance.post("/auth/login", data);
-      if (res.data.success) {
+      console.log(res.data.status);
+      if (res.data.status === "success") {
         dispatch(
           userdata({
             isAuthenticated: true,
             username: res.data.data.username,
             email: res.data.data.email,
-            name: res.data.data.name,
           })
         );
-        toast.success(res.data.message, {
+        toast.success("Login Success", {
           position: "bottom-right",
         });
       } else {
