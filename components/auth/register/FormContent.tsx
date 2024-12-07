@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 import {
   Form,
@@ -30,7 +31,7 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const UserRegSchema = z.object({
     email: z.string().email("This is not a valid email."),
     password: z.string().min(3),
@@ -66,6 +67,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         toast.success(res.data.message, {
           position: "bottom-right",
         });
+        router.push("/")
       } else {
         toast.warn(res.data.data.response.data.message, {
           position: "bottom-right",

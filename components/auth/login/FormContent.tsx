@@ -12,6 +12,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AxiosInstance from "@/lib/axiosInstance";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 import {
   Form,
@@ -29,6 +30,7 @@ import { userdata } from "@/redux/features/auth";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+  const router = useRouter();
   const dispatch = useDispatch();
   const UserRegSchema = z.object({
     email: z.string().email("This is not a valid email."),
@@ -63,6 +65,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         toast.success("Login Success", {
           position: "bottom-right",
         });
+        router.push("/")
       } else {
         toast.warn(res.data.message, {
           position: "bottom-right",
