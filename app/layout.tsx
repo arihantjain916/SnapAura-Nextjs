@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ReduxProvider from "@/redux/provider";
-import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
@@ -18,7 +17,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <ReduxProvider>
-          <Header />
           <main className="flex-1 relative z-0">{children}</main>
           <Footer />
         </ReduxProvider>

@@ -1,9 +1,4 @@
-
-
+import { LoginComponent } from "@/components/auth/login/login";
 export default function Home() {
-  return (
-    <div>
-      <p>Arihant Jain</p>
-    </div>
-  );
+  return <LoginComponent />;
 }
