@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AxiosInstance from "@/lib/axiosInstance";
+import Cookies from "js-cookie";
 
 import {
   Form,
@@ -58,6 +59,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             email: res.data.data.email,
           })
         );
+        Cookies.set("AUTH_TOKEN", res.data.token, { expires: 7 });
         toast.success("Login Success", {
           position: "bottom-right",
         });

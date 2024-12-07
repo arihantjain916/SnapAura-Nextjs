@@ -10,6 +10,7 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Cookies from "js-cookie";
 
 import {
   Form,
@@ -61,6 +62,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             name: res.data.data.name,
           })
         );
+        Cookies.set("AUTH_TOKEN", res.data.token, { expires: 7 });
         toast.success(res.data.message, {
           position: "bottom-right",
         });
