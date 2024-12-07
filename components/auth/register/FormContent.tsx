@@ -20,10 +20,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import AxiosInstance from "@/lib/axiosInstance";
+import { useSelector, useDispatch } from "react-redux";
+import { userdata } from "@/redux/features/auth";
+import { RootState } from "@/redux/store";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+  const dispatch = useDispatch();
+
   const UserRegSchema = z.object({
     email: z.string().email("This is not a valid email."),
     password: z.string().min(3),
@@ -44,8 +49,26 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(data: UserRegSchemaType) {
     setIsLoading(true);
 
-    const res = await AxiosInstance.post("/auth/register", data);
-    console.log(res);
+    try {
+      const res = await AxiosInstance.post("/auth/register", data);
+      if (res.data.success) {
+        dispatch(
+          userdata({
+            isAuthenticated: true,
+            username: res.data.data.username,
+            email: res.data.data.email,
+            name: res.data.data.name,
+          })
+        );
+        alert(res.data.message);
+      } else {
+        console.log(res.data.data.response.data.message);
+      }
+    } catch (error: any) {
+      if(error.response.status === 422){
+        alert(error.response.data.message);
+      }
+    }
 
     form.reset();
 
