@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell, Home, Search, Users, Menu } from "lucide-react";
+import { UserDropdown } from "./UserDropdown";
 
 export function Header() {
   return (
@@ -50,7 +50,7 @@ export function Header() {
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
           </Button>
-          {/* <UserDropdown /> */}
+          <UserDropdown />
         </div>
       </div>
     </header>
