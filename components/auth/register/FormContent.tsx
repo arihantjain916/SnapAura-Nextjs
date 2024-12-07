@@ -68,7 +68,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input type="text" {...field} disabled={isLoading} />
+                    <Input
+                      type="text"
+                      {...field}
+                      placeholder="username"
+                      disabled={isLoading}
+                      required
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -86,6 +92,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                       placeholder="m@exp.com"
                       {...field}
                       disabled={isLoading}
+                      required
                     />
                   </FormControl>
                   <FormMessage />
@@ -105,6 +112,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                       placeholder="password"
                       {...field}
                       disabled={isLoading}
+                      required
                     />
                   </FormControl>
                   <FormMessage />

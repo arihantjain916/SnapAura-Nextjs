@@ -72,6 +72,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                       placeholder="m@exp.com"
                       {...field}
                       disabled={isLoading}
+                      required
                     />
                   </FormControl>
                   <FormMessage />
@@ -91,6 +92,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                       placeholder="password"
                       {...field}
                       disabled={isLoading}
+                      required
                     />
                   </FormControl>
                   <FormMessage />
