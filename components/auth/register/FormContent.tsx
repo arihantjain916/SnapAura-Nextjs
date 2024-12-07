@@ -22,7 +22,8 @@ import {
 import AxiosInstance from "@/lib/axiosInstance";
 import { useSelector, useDispatch } from "react-redux";
 import { userdata } from "@/redux/features/auth";
-import { RootState } from "@/redux/store";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -60,13 +61,19 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             name: res.data.data.name,
           })
         );
-        alert(res.data.message);
+        toast.success(res.data.message, {
+          position: "bottom-right",
+        });
       } else {
-        console.log(res.data.data.response.data.message);
+        toast.warn(res.data.data.response.data.message, {
+          position: "bottom-right",
+        });
       }
     } catch (error: any) {
-      if(error.response.status === 422){
-        alert(error.response.data.message);
+      if (error.response.status === 422) {
+        toast.warn(error.response.data.message, {
+          position: "bottom-right",
+        });
       }
     }
 
@@ -86,112 +93,115 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   };
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-2">
-            {/* Email Field */}
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username*</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      {...field}
-                      placeholder="username"
-                      required
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email*</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="m@exp.com"
-                      {...field}
-                      required
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Password Field */}
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password*</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="password"
-                      {...field}
-                      required
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Submit Button */}
-            <Button type="submit" disabled={isLoading}>
-              {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Sign In with Email
-            </Button>
+    <>
+      <ToastContainer />
+      <div className={cn("grid gap-6", className)} {...props}>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid gap-2">
+              {/* Email Field */}
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username*</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        {...field}
+                        placeholder="username"
+                        required
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email*</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="m@exp.com"
+                        {...field}
+                        required
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* Password Field */}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password*</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="password"
+                        {...field}
+                        required
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* Submit Button */}
+              <Button type="submit" disabled={isLoading}>
+                {isLoading && (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Sign In with Email
+              </Button>
+            </div>
+          </form>
+        </Form>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
           </div>
-        </form>
-      </Form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
+        <Button
+          variant="outline"
+          type="button"
+          disabled={isLoading}
+          onClick={handleGithubSignIn}
+        >
+          {isLoading ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Icons.gitHub className="mr-2 h-4 w-4" />
+          )}{" "}
+          Github
+        </Button>
+        <Button
+          variant="outline"
+          type="button"
+          disabled={isLoading}
+          onClick={handleGoogleSignIn}
+        >
+          {isLoading ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Icons.google className="mr-2 h-4 w-4" />
+          )}{" "}
+          Google
+        </Button>
       </div>
-      <Button
-        variant="outline"
-        type="button"
-        disabled={isLoading}
-        onClick={handleGithubSignIn}
-      >
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
-        Github
-      </Button>
-      <Button
-        variant="outline"
-        type="button"
-        disabled={isLoading}
-        onClick={handleGoogleSignIn}
-      >
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.google className="mr-2 h-4 w-4" />
-        )}{" "}
-        Google
-      </Button>
-    </div>
+    </>
   );
 }
