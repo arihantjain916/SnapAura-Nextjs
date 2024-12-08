@@ -57,8 +57,8 @@ export function FormContent({ className, ...props }: UserProfileType) {
   const form = useForm<userProfileSchemaType>({
     resolver: zodResolver(userProfile),
     defaultValues: {
-      email: email,
-      username: username,
+      email: email ?? "",
+      username: username ?? "",
       name: name ?? "",
     },
   });
@@ -135,7 +135,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid gap-2">
               {/* profile Field */}
-              <div className="flex gap-2">
+              <div className="flex flex-col md:flex-row gap-2">
                 <Avatar>
                   <AvatarImage
                     src={profile ?? "https://github.com/shadcn.png"}
