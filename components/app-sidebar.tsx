@@ -1,7 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { Frame, Map, Bell, Home, Search, MessageCircle } from "lucide-react";
+import {
+  Frame,
+  Map,
+  Bell,
+  Home,
+  Search,
+  MessageCircle,
+  User,
+} from "lucide-react";
 
 import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "./nav-user";
@@ -15,50 +23,60 @@ import {
 
 import { useSelector, UseSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-
-const data = {
-  projects: [
-    {
-      name: "Home",
-      url: "#",
-      icon: Home,
-    },
-    {
-      name: "Search",
-      url: "#",
-      icon: Search,
-    },
-    {
-      name: "Notification",
-      url: "#",
-      icon: Bell,
-    },
-    {
-      name: "Messages",
-      url: "#",
-      icon: MessageCircle,
-    },
-    {
-      name: "Create",
-      url: "#",
-      icon: MessageCircle,
-    },
-    {
-      name: "Profile",
-      url: "#",
-      icon: MessageCircle,
-    },
-  ],
-};
+import { usePathname } from "next/navigation";
+import path from "node:path/posix";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { username, email } = useSelector((state: RootState) => state.auth);
+  const pathname = usePathname();
   const user = {
     name: username,
     email: email,
     avatar: "/avatars/shadcn.jpg",
   };
 
+  console.log(pathname);
+
+  const data = {
+    projects: [
+      {
+        name: "Home",
+        url: "#",
+        icon: Home,
+        active: pathname === "/",
+      },
+      {
+        name: "Search",
+        url: "#",
+        icon: Search,
+        active: pathname === "/search",
+      },
+      {
+        name: "Notification",
+        url: "#",
+        icon: Bell,
+        active: pathname === "/notification",
+      },
+      {
+        name: "Messages",
+        url: "#",
+        icon: MessageCircle,
+        active: pathname === "/messages",
+      },
+      {
+        name: "Create",
+        url: "#",
+        icon: MessageCircle,
+        active: pathname === "/create",
+      },
+      {
+        name: "Profile",
+        url: "#",
+        icon: User,
+        active: pathname === "/profile",
+      },
+    ],
+  };
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
