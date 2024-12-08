@@ -79,7 +79,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <h1 className="text-lg font-bold text-center">SnapAura</h1>
+        SnapAura
       </SidebarHeader>
       <SidebarContent>
         <NavProjects projects={data.projects} />
