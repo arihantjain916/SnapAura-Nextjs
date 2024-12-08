@@ -71,7 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         name: "Profile",
-        url: "#",
+        url: "/profile",
         icon: User,
         active: pathname === "/profile",
       },
