@@ -21,10 +21,9 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import { useSelector, UseSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { usePathname } from "next/navigation";
-import path from "node:path/posix";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { username, email } = useSelector((state: RootState) => state.auth);

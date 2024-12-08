@@ -65,7 +65,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         toast.success("Login Success", {
           position: "bottom-right",
         });
-        router.push("/")
+        router.push("/");
       } else {
         toast.warn(res.data.message, {
           position: "bottom-right",
@@ -83,10 +83,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       }
     }
     form.reset();
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
   }
 
   const handleGoogleSignIn = () => {
