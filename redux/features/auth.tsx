@@ -5,12 +5,14 @@ export interface AuthState {
   isAuthenticated: boolean;
   username: string;
   email: string;
+  profile?: string;
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
   username: "",
   email: "",
+  profile:""
 };
 
 export const authSlice = createSlice({
@@ -21,11 +23,13 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       state.username = action.payload.username;
       state.email = action.payload.email;
+      state.profile = action.payload.profile
     },
     logout: (state) => {
       state.isAuthenticated = false;
       state.username = "";
       state.email = "";
+      state.profile = "";
       Cookies.remove("AUTH_TOKEN");
     },
   },

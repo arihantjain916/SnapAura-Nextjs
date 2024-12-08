@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,19 +18,39 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
-import { ToastContainer } from "react-toastify";
 import { CardFooter } from "../ui/card";
+import { ToastContainer, toast } from "react-toastify";
+import AxiosInstance from "@/lib/axiosInstance";
+import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
+import { userdata } from "@/redux/features/auth";
+import { ChangeEvent } from "react";
+import React from "react";
 
 interface UserProfileType extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function FormContent({ className, ...props }: UserProfileType) {
-  const { username, email } = useSelector((state: RootState) => state.auth);
+  const { username, email, profile } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const [image, setImage] = React.useState<File | null>(null);
+  const dispatch = useDispatch();
 
   const userProfile = z.object({
-    email: z.string().email("This is not a valid email.").optional(),
-    password: z.string().min(3).optional(),
-    username: z.string().min(3).optional(),
-    photo: z.any().optional(),
+    email: z
+      .string()
+      .email("This is not a valid email.")
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+    password: z
+      .string()
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+    username: z
+      .string()
+      .min(3)
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
   });
 
   type userProfileSchemaType = z.infer<typeof userProfile>;
@@ -40,12 +60,65 @@ export function FormContent({ className, ...props }: UserProfileType) {
       email: email,
       password: "",
       username: username,
-      photo: "",
     },
   });
 
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && file.type.includes("image")) {
+      setImage(file);
+    } else {
+      alert("Please select a valid image file.");
+    }
+  };
   async function onSubmit(data: userProfileSchemaType) {
-    console.log(data);
+    try {
+      const formData = new FormData();
+      if (image && typeof image !== "string") {
+        formData.append("profile", image);
+      }
+      formData.append("username", data.username || "");
+      formData.append("email", data.email || "");
+
+      const res = await AxiosInstance.post(
+        "/user/update/profile?_method=PUT",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("AUTH_TOKEN")}`,
+          },
+        }
+      );
+      if (res.data.status) {
+        dispatch(
+          userdata({
+            isAuthenticated: true,
+            username: res.data.data.username,
+            email: res.data.data.email,
+            profile: res.data.data.profile,
+          })
+        );
+        toast.success(res.data.message, {
+          position: "bottom-right",
+        });
+        // window.location.reload();
+      } else {
+        toast.warn(res.data.message, {
+          position: "bottom-right",
+        });
+      }
+    } catch (error: any) {
+      if (error.response.status === 422) {
+        toast.warn(error.response.data.message, {
+          position: "bottom-right",
+        });
+      } else {
+        toast.warn(error.response.data.message, {
+          position: "bottom-right",
+        });
+      }
+    }
+    form.reset();
   }
   return (
     <>
@@ -54,29 +127,23 @@ export function FormContent({ className, ...props }: UserProfileType) {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid gap-2">
-              {/* Photo Field */}
-              <FormField
-                control={form.control}
-                name="photo"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Profile Image*</FormLabel>
-                    <div className="flex gap-2">
-                      <Avatar>
-                        <AvatarImage
-                          src="https://github.com/shadcn.png"
-                          alt="@shadcn"
-                        />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                      <FormControl>
-                        <Input type="file" accept="image/*" {...field} />
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* profile Field */}
+              <div className="flex gap-2">
+                <Avatar>
+                  <AvatarImage
+                    src={profile ?? "https://github.com/shadcn.png"}
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </FormControl>
+              </div>
               {/* Email Field */}
               <FormField
                 control={form.control}
