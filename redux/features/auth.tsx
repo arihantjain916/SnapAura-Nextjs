@@ -6,13 +6,15 @@ export interface AuthState {
   username: string;
   email: string;
   profile?: string;
+  name?: string;
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
   username: "",
   email: "",
-  profile:""
+  profile:"",
+  name:""
 };
 
 export const authSlice = createSlice({
@@ -23,6 +25,7 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       state.username = action.payload.username;
       state.email = action.payload.email;
+      state.name = action.payload.name
       state.profile = action.payload.profile
     },
     logout: (state) => {
@@ -30,6 +33,7 @@ export const authSlice = createSlice({
       state.username = "";
       state.email = "";
       state.profile = "";
+      state.name = "";
       Cookies.remove("AUTH_TOKEN");
     },
   },

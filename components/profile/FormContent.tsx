@@ -30,7 +30,7 @@ import React from "react";
 interface UserProfileType extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function FormContent({ className, ...props }: UserProfileType) {
-  const { username, email, profile } = useSelector(
+  const { username, email, profile, name } = useSelector(
     (state: RootState) => state.auth
   );
   const [image, setImage] = React.useState<File | null>(null);
@@ -42,7 +42,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
       .email("This is not a valid email.")
       .optional()
       .transform((val) => (val === "" ? undefined : val)),
-    password: z
+    name: z
       .string()
       .optional()
       .transform((val) => (val === "" ? undefined : val)),
@@ -58,8 +58,8 @@ export function FormContent({ className, ...props }: UserProfileType) {
     resolver: zodResolver(userProfile),
     defaultValues: {
       email: email,
-      password: "",
       username: username,
+      name: name ?? "",
     },
   });
 
@@ -79,6 +79,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
       }
       formData.append("username", data.username || "");
       formData.append("email", data.email || "");
+      formData.append("name", data.name || "");
 
       const res = await AxiosInstance.post(
         "/user/update/profile?_method=PUT",
@@ -96,6 +97,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
             username: res.data.data.username,
             email: res.data.data.email,
             profile: res.data.data.profile,
+            name: res.data.data.name,
           })
         );
         toast.success(res.data.message, {
@@ -161,13 +163,13 @@ export function FormContent({ className, ...props }: UserProfileType) {
               {/* Password Field */}
               <FormField
                 control={form.control}
-                name="password"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password*</FormLabel>
+                    <FormLabel>Name*</FormLabel>
                     <FormControl>
                       <Input
-                        type="password"
+                        type="text"
                         {...field}
                         //   disabled={isLoading}
                       />
