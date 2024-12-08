@@ -1,18 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
+import { Frame, Map, Bell, Home, Search, MessageCircle } from "lucide-react";
 
 import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "./nav-user";
@@ -24,106 +13,52 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-// This is sample data.
+import { useSelector, UseSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "Home",
       url: "#",
-      icon: Frame,
+      icon: Home,
     },
     {
-      name: "Sales & Marketing",
+      name: "Search",
       url: "#",
-      icon: PieChart,
+      icon: Search,
     },
     {
-      name: "Travel",
+      name: "Notification",
       url: "#",
-      icon: Map,
+      icon: Bell,
+    },
+    {
+      name: "Messages",
+      url: "#",
+      icon: MessageCircle,
+    },
+    {
+      name: "Create",
+      url: "#",
+      icon: MessageCircle,
+    },
+    {
+      name: "Profile",
+      url: "#",
+      icon: MessageCircle,
     },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { username, email } = useSelector((state: RootState) => state.auth);
+  const user = {
+    name: username,
+    email: email,
+    avatar: "/avatars/shadcn.jpg",
+  };
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -133,7 +68,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
