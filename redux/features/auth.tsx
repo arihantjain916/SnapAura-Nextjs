@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import cookie from "js-cookie";
+import Cookies from "js-cookie";
 
 export interface AuthState {
   isAuthenticated: boolean;
@@ -26,6 +26,7 @@ export const authSlice = createSlice({
       state.isAuthenticated = false;
       state.username = "";
       state.email = "";
+      Cookies.remove("AUTH_TOKEN");
     },
   },
 });
