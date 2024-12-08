@@ -100,6 +100,11 @@ export function FormContent({ className, ...props }: UserProfileType) {
             name: res.data.data.name,
           })
         );
+        form.reset({
+          email: res.data.data.email,
+          username: res.data.data.username,
+          name: res.data.data.name,
+        });
         toast.success(res.data.message, {
           position: "bottom-right",
         });
