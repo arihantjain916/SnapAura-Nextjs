@@ -1,14 +1,10 @@
 "use client";
 
-import { RootState } from "@/redux/store";
 import { useQuery } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
-import { useSelector } from "react-redux";
 import AxiosInstance from "@/lib/axiosInstance";
 
 export const Feed = () => {
-  const { username, profile } = useSelector((state: RootState) => state.auth);
-
   async function fetchFeed() {
     try {
       const res = await AxiosInstance.get("/post");
@@ -19,7 +15,8 @@ export const Feed = () => {
   }
   const { isPending, error, data } = useQuery({
     queryKey: ["feedData"],
-    queryFn: fetchFeed,
+    queryFn: async () => await fetchFeed(),
+    refetchInterval: 50000,
   });
 
   console.log(data);
@@ -70,15 +67,19 @@ export const Feed = () => {
               </div>
 
               {/* Comments */}
-              <div className="text-base mb-2 cursor-pointer">
-                View all 14 comments
-              </div>
-              <div className="mb-2 text-sm">
-                <span className="font-medium mr-2">razzle_dazzle</span>
-                Dude! How cool! I went to New Zealand last summer and had a
-                blast taking the tour! So much to see! Make sure you bring a
-                good camera when you go!
-              </div>
+              {feed.comments.length > 0 && (
+                <>
+                  <div className="text-base mb-2 cursor-pointer">
+                    View all {feed.comments.length} comments
+                  </div>
+                  <div className="mb-2 text-sm">
+                    <span className="font-medium mr-2">
+                      {feed.comments[0].user.username}
+                    </span>
+                    {feed.comments[0].comment}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
