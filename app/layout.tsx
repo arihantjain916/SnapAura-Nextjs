@@ -19,10 +19,8 @@ export default function RootLayout({
       <body className="flex flex-col min-h-screen">
         <ReduxProvider>
           <TanStackProvider>
-            <main className="flex-1 relative z-0">
-              {children}
-              <Footer />
-            </main>
+            {children}
+            <Footer />
           </TanStackProvider>
         </ReduxProvider>
       </body>
