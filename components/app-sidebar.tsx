@@ -35,8 +35,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     avatar: "/avatars/shadcn.jpg",
   };
 
-  console.log(pathname);
-
   const data = {
     projects: [
       {
