@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ReduxProvider from "@/redux/provider";
 import { Footer } from "@/components/layout/Footer";
+import { TanStackProvider } from "@/lib/TanStackProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,10 +18,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <ReduxProvider>
-          <main className="flex-1 relative z-0">
-            {children}
-            <Footer />
-          </main>
+          <TanStackProvider>
+            <main className="flex-1 relative z-0">
+              {children}
+              <Footer />
+            </main>
+          </TanStackProvider>
         </ReduxProvider>
       </body>
     </html>
