@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const AxiosInstance = axios.create({
-  baseURL: "http://backend-laravel.test/api",
+  baseURL: "https://developer.iamstillalive.co/sonal/SnapAura/public/api",
   headers: {
     Accept: "application/json",
   },
