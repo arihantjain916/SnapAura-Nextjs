@@ -1,12 +1,13 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { Feed } from "@/components/feed";
 
 export default function Home() {
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarTrigger />
-      <main className="flex-1 relative z-0">Arihant Jain</main>
+        <Feed />
     </SidebarProvider>
   );
 }

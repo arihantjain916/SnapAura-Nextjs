@@ -41,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     projects: [
       {
         name: "Home",
-        url: "#",
+        url: "/",
         icon: Home,
         active: pathname === "/",
       },
