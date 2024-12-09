@@ -1,16 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import cookie from "js-cookie";
+import Cookies from "js-cookie";
 
 export interface AuthState {
   isAuthenticated: boolean;
   username: string;
   email: string;
+  profile?: string;
+  name?: string;
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
   username: "",
   email: "",
+  profile:"",
+  name:""
 };
 
 export const authSlice = createSlice({
@@ -21,11 +25,16 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       state.username = action.payload.username;
       state.email = action.payload.email;
+      state.name = action.payload.name
+      state.profile = action.payload.profile
     },
     logout: (state) => {
       state.isAuthenticated = false;
       state.username = "";
       state.email = "";
+      state.profile = "";
+      state.name = "";
+      Cookies.remove("AUTH_TOKEN");
     },
   },
 });
