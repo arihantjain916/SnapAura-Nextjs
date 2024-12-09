@@ -1,12 +1,10 @@
 import {
-  Frame,
-  Map,
   Bell,
   Home,
   Search,
   MessageCircle,
   User,
-  Plus,
+  CirclePlus,
 } from "lucide-react";
 
 export const DATA = [
@@ -16,6 +14,11 @@ export const DATA = [
     icon: Home,
   },
   {
+    name: "Search",
+    url: "/search",
+    icon: Search,
+  },
+  {
     name: "Notification",
     url: "/notification",
     icon: Bell,
@@ -23,7 +26,7 @@ export const DATA = [
   {
     name: "Create",
     url: "/create",
-    icon: Plus,
+    icon: CirclePlus,
   },
   {
     name: "Chat",

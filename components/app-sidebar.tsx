@@ -9,6 +9,7 @@ import {
   Search,
   MessageCircle,
   User,
+  CirclePlus,
 } from "lucide-react";
 
 import { NavProjects } from "@/components/nav-projects";
@@ -65,7 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {
         name: "Create",
         url: "#",
-        icon: MessageCircle,
+        icon: CirclePlus,
         active: pathname === "/create",
       },
       {
@@ -77,17 +78,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
   };
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        SnapAura
-      </SidebarHeader>
-      <SidebarContent>
-        <NavProjects projects={data.projects} />
-      </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={user} />
-      </SidebarFooter>
-      <SidebarRail />
-    </Sidebar>
+      <Sidebar collapsible="icon" {...props}>
+        <SidebarHeader>SnapAura</SidebarHeader>
+        <SidebarContent>
+          <NavProjects projects={data.projects} />
+        </SidebarContent>
+        <SidebarFooter>
+          <NavUser user={user} />
+        </SidebarFooter>
+        <SidebarRail />
+      </Sidebar>
   );
 }
