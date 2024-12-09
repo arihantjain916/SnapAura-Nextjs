@@ -27,6 +27,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user, account }) {
+      console.log(user);
       if (account?.provider === "github" || account?.provider === "google") {
         try {
           console.log("The provider is either Github or Google...");
