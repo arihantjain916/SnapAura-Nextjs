@@ -53,14 +53,14 @@ export const Feed = () => {
     <div className="container mx-auto my-10 sm:px-20">
       {data?.map((feed: any) => (
         <div key={feed.id} className="p-8 flex justify-center">
-          <div className="rounded overflow-hidden border w-full lg:w-6/12 md:w-6/12 bg-white mx-3">
+          <div className="rounded overflow-hidden border w-full lg:w-6/12 md:w-6/12 bg-white mx-3 dark:bg-gray-800">
             {/* Header Section */}
             <div className="w-full flex justify-between p-3">
               <div className="flex items-center">
                 <div className="rounded-full h-8 w-8 bg-gray-500 flex items-center justify-center overflow-hidden">
                   <img src={feed.user.profile} alt={feed.user.username} />
                 </div>
-                <span className="pt-1 ml-2 font-bold text-sm">
+                <span className="pt-1 ml-2 font-bold text-sm dark:text-white">
                   {feed.user.username}
                 </span>
               </div>

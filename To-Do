@@ -9,3 +9,4 @@ Bug:
 user get redirect to register page when register instead ask to verify their account
 email template ui and link
 make feed dark mode compatible
+after logout remove isVerified

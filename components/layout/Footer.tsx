@@ -16,7 +16,7 @@ export const Footer = () => {
                   </label>
 
                   <input
-                    className="w-full rounded-full border-gray-200 bg-gray-100 p-4 pe-32 text-sm font-medium z-0"
+                    className="w-full rounded-full border-gray-200 bg-gray-100 p-4 pe-32 text-sm font-medium z-0 dark:bg-gray-700 dark:border-gray-600 text-white"
                     id="email"
                     type="email"
                     placeholder="john@doe.com"
