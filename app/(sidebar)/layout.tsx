@@ -1,4 +1,8 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 
 export default function RootLayout({
@@ -9,8 +13,10 @@ export default function RootLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarTrigger />
-      <main className="flex-1 relative z-0">{children}</main>
+      <SidebarInset>
+        <SidebarTrigger />
+        <main className="flex-1 relative z-0">{children}</main>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  type LucideIcon,
-} from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -22,15 +20,13 @@ export function NavProjects({
   }[];
 }) {
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden flex justify-between">
+    <SidebarGroup>
       <SidebarMenu className="flex gap-12 justify-between mt-3">
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url} className={item.active ? "underline" : ""}>
-                <item.icon />
-                <span>{item.name}</span>
-              </a>
+            <SidebarMenuButton tooltip={item.name}>
+              {item.icon && <item.icon />}
+              <span>{item.name}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
