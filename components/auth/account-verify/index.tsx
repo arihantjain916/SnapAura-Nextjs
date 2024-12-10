@@ -1,14 +1,10 @@
 "use client";
 
-import React from "react";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-
-const AccountVerify = () => {
+const AccountVerify = (props: {
+  token: string | string[] | undefined;
+  id: string | string[] | undefined;
+}) => {
+  console.log(props);
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="max-w-md mx-auto text-center bg-white px-4 sm:px-8 py-10 rounded-xl shadow">
