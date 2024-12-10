@@ -3,6 +3,7 @@ import "./globals.css";
 import ReduxProvider from "@/redux/provider";
 import { Footer } from "@/components/layout/Footer";
 import { TanStackProvider } from "@/lib/TanStackProvider";
+import { ShadcnProvider } from "@/lib/ShadcnProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,10 +19,17 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <ReduxProvider>
-          <TanStackProvider>
-            {children}
-            <Footer />
-          </TanStackProvider>
+          <ShadcnProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TanStackProvider>
+              {children}
+              <Footer />
+            </TanStackProvider>
+          </ShadcnProvider>
         </ReduxProvider>
       </body>
     </html>
