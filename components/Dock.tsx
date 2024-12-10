@@ -38,29 +38,6 @@ export function HeaderDock() {
           </DockIcon>
         ))}
         <Separator orientation="vertical" className="h-full py-2" />
-        {/* {Object.entries(DATA.contact.social).map(([name, social]) => (
-          <DockIcon key={name}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href={social.url}
-                  className={cn(
-                    buttonVariants({ variant: "ghost", size: "icon" }),
-                    "size-12 rounded-full"
-                  )}
-                >
-                  <social.icon className="size-4" />
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{name}</p>
-              </TooltipContent>
-            </Tooltip>
-          </DockIcon>
-        ))} */}
-        <Separator orientation="vertical" className="h-full py-2" />
         <DockIcon>
           <Tooltip>
             <TooltipTrigger asChild>

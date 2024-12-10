@@ -19,6 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { MobileNavbar } from "../mobile-navbar";
+import { HeaderDock } from "../Dock";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -194,7 +195,11 @@ const Sidebar = React.forwardRef<
     }
 
     if (isMobile) {
-      return <MobileNavbar />;
+      return (
+        <div className="fixed z-50 w-[21rem] h-16 max-w-lg -translate-x-[55%] bg-white bottom-8 left-1/2">
+          <HeaderDock />
+        </div>
+      );
     }
 
     return (
