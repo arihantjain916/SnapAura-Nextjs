@@ -1,15 +1,25 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request: any) {
-  const path = request.nextUrl.pathname;
-  const isPublicPath = path === "/auth/login" || path === "/auth/register";
-  const token = request.cookies.get("AUTH_TOKEN");
-  if (isPublicPath && token) {
-    return NextResponse.redirect(new URL("/", request.nextUrl));
+  const { pathname } = request.nextUrl;
+  const token = request.cookies.get("AUTH_TOKEN")?.value;
+  const isVerified = request.cookies.get("isEmailVerified")?.value ?? "yes";
+
+  const publicPaths = ["/auth/login", "/auth/register", "/auth/account-lock","/auth/account-verify/*"];
+  const isPublicPath = publicPaths.includes(pathname);
+
+  if (token && isVerified === "no" && pathname !== "/auth/account-lock") {
+    return NextResponse.redirect(
+      new URL("/auth/account-lock", request.nextUrl)
+    );
   }
 
   if (!isPublicPath && !token) {
     return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
+  }
+
+  if (isPublicPath && token) {
+    return NextResponse.redirect(new URL("/", request.nextUrl));
   }
 
   return NextResponse.next();

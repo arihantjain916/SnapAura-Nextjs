@@ -19,7 +19,35 @@ export const Feed = () => {
     refetchInterval: 50000,
   });
 
-  console.log(data);
+  if (error) {
+    return (
+      <div className="container mx-auto my-10 sm:px-20">
+        <div className="p-8 flex justify-center">
+          <div className="rounded overflow-hidden border w-full lg:w-6/12 md:w-6/12 bg-white mx-3">
+            <div className="px-3 pb-2">
+              <h1 className="text-center text-2xl font-bold">
+                Something went wrong
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <div className="container mx-auto my-10 sm:px-20">
+        <div className="p-8 flex justify-center">
+          <div className="rounded overflow-hidden border w-full lg:w-6/12 md:w-6/12 bg-white mx-3">
+            <div className="px-3 pb-2">
+              <h1 className="text-center text-2xl font-bold">Loading...</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto my-10 sm:px-20">
@@ -43,7 +71,7 @@ export const Feed = () => {
 
             {/* Image Section */}
             <img
-              className="w-full bg-cover"
+              className="w-full bg-cover pointer-events-none"
               src={feed.image}
               alt={feed.user.username}
             />

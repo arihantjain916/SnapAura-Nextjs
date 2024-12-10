@@ -22,10 +22,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import AxiosInstance from "@/lib/axiosInstance";
-import {  useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { userdata } from "@/redux/features/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { EmailSent } from "../email-send";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -63,11 +64,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             name: res.data.data.name,
           })
         );
-        Cookies.set("AUTH_TOKEN", res.data.token, { expires: 7 });
         toast.success(res.data.message, {
           position: "bottom-right",
         });
-        router.push("/")
+        const ttl = new Date().getTime() + 5 * 60 * 1000;
+        Cookies.set("AUTH_TOKEN", res.data.token, { expires: 7 });
+        Cookies.set("isEmailVerified", "no", { expires: 1 });
+        router.push(
+          `/auth/email-sent?email=${res.data.data.email}&ttl=${ttl}`
+        );
       } else {
         toast.warn(res.data.data.response.data.message, {
           position: "bottom-right",
@@ -79,13 +84,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           position: "bottom-right",
         });
       }
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
 
     form.reset();
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
   }
 
   const handleGoogleSignIn = () => {

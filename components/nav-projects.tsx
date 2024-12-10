@@ -24,14 +24,14 @@ export function NavProjects({
     <SidebarGroup>
       <SidebarMenu className="flex gap-12 justify-between mt-3">
         {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <Link href={item.url} className={item.active ? "underline" : ""}>
+          <Link href={item.url} key={item.name}>
+            <SidebarMenuItem>
               <SidebarMenuButton tooltip={item.name}>
                 {item.icon && <item.icon />}
                 <span>{item.name}</span>
               </SidebarMenuButton>
-            </Link>
-          </SidebarMenuItem>
+            </SidebarMenuItem>
+          </Link>
         ))}
       </SidebarMenu>
     </SidebarGroup>
