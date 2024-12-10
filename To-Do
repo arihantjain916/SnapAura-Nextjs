@@ -9,3 +9,4 @@ Bug:
 isLoading make false in catch and in finally
 user get redirect to register page when register instead ask to verify their account
 email template ui and link
+make feed dark mode compatible
