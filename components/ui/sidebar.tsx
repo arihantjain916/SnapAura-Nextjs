@@ -196,7 +196,7 @@ const Sidebar = React.forwardRef<
 
     if (isMobile) {
       return (
-        <div className="fixed z-50 w-[21rem] h-16 max-w-lg -translate-x-[55%] bg-white bottom-8 left-1/2">
+        <div className="fixed z-50 w-[21rem] h-16 max-w-lg -translate-x-[55%] bottom-8 left-1/2">
           <HeaderDock />
         </div>
       );

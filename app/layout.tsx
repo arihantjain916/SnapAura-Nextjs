@@ -19,7 +19,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <ReduxProvider>
-          <ShadcnProvider>
+          <ShadcnProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             <TanStackProvider>
               {children}
               <Footer />
