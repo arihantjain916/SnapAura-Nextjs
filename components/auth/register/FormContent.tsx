@@ -71,7 +71,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         Cookies.set("AUTH_TOKEN", res.data.token, { expires: 7 });
         Cookies.set("isEmailVerified", "no", { expires: 1 });
         router.push(
-          `/auth/account-lock?email=${res.data.data.email}&ttl=${ttl}`
+          `/auth/email-sent?email=${res.data.data.email}&ttl=${ttl}`
         );
       } else {
         toast.warn(res.data.data.response.data.message, {

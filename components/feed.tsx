@@ -71,7 +71,7 @@ export const Feed = () => {
 
             {/* Image Section */}
             <img
-              className="w-full bg-cover"
+              className="w-full bg-cover pointer-events-none"
               src={feed.image}
               alt={feed.user.username}
             />
