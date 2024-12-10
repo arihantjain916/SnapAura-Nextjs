@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import AxiosInstance from "@/lib/axiosInstance";
-import {  useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { userdata } from "@/redux/features/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -67,7 +67,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         toast.success(res.data.message, {
           position: "bottom-right",
         });
-        router.push("/")
+        router.push("/");
       } else {
         toast.warn(res.data.data.response.data.message, {
           position: "bottom-right",
@@ -79,13 +79,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           position: "bottom-right",
         });
       }
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
 
     form.reset();
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
   }
 
   const handleGoogleSignIn = () => {

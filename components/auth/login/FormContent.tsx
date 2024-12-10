@@ -81,6 +81,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           position: "bottom-right",
         });
       }
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
     form.reset();
   }
