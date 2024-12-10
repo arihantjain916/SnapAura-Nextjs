@@ -2,11 +2,13 @@
 
 import AxiosInstance from "@/lib/axiosInstance";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const AccountVerify = (props: {
   token: string | string[] | undefined;
   id: string | string[] | undefined;
 }) => {
+  const router = useRouter();
   async function verifyEmail() {
     try {
       const res = await AxiosInstance.get(
@@ -16,6 +18,7 @@ const AccountVerify = (props: {
       if (res.data.success) {
         Cookies.set("isEmailVerified", "yes", { expires: 1 });
         alert(res.data.message);
+        router.push("/");
       }
     } catch (err: any) {
       if (err.response.status === 500) {
