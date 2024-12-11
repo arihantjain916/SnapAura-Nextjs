@@ -1,3 +1,5 @@
+"use client"
+
 import Custom404 from "@/app/not-found";
 import { useSearchParams } from "next/navigation";
 
