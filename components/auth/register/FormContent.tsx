@@ -62,7 +62,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             username: res.data.data.username,
             email: res.data.data.email,
             name: res.data.data.name ?? "",
-            profile: res.data.data.profile ?? "",
+            profile: res.data.data.profile ?? null,
           })
         );
         toast.success(res.data.message, {
