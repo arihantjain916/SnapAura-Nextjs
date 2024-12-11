@@ -27,12 +27,14 @@ import { RootState } from "@/redux/store";
 import { usePathname } from "next/navigation";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { username, email } = useSelector((state: RootState) => state.auth);
+  const { username, email, profile } = useSelector(
+    (state: RootState) => state.auth
+  );
   const pathname = usePathname();
   const user = {
     name: username,
     email: email,
-    avatar: "/avatars/shadcn.jpg",
+    avatar: profile ?? "/avatars/shadcn.jpg",
   };
 
   const data = {
