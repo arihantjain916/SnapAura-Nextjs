@@ -59,6 +59,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             isAuthenticated: true,
             username: res.data.data.username,
             email: res.data.data.email,
+            name: res.data.data.name ?? "",
+            profile: res.data.data.profile ?? "",
           })
         );
         Cookies.set("AUTH_TOKEN", res.data.token, { expires: 7 });

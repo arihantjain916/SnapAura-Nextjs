@@ -3,6 +3,7 @@
 3. message
 4. notification
 5. search
+6. Add dark mode toogle in sidebar
 
 
 Bug: 
@@ -10,3 +11,5 @@ user get redirect to register page when register instead ask to verify their acc
 email template ui and link
 make feed dark mode compatible
 after logout remove isVerified
+display user profile fetch from backend insted of redux
+because this cause error when we use different devices
