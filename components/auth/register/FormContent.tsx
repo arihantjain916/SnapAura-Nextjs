@@ -61,7 +61,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             isAuthenticated: true,
             username: res.data.data.username,
             email: res.data.data.email,
-            name: res.data.data.name,
+            name: res.data.data.name ?? "",
+            profile: res.data.data.profile ?? null,
           })
         );
         toast.success(res.data.message, {
@@ -70,9 +71,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         const ttl = new Date().getTime() + 5 * 60 * 1000;
         Cookies.set("AUTH_TOKEN", res.data.token, { expires: 7 });
         Cookies.set("isEmailVerified", "no", { expires: 1 });
-        router.push(
-          `/auth/email-sent?email=${res.data.data.email}&ttl=${ttl}`
-        );
+        router.push(`/auth/email-sent?email=${res.data.data.email}&ttl=${ttl}`);
       } else {
         toast.warn(res.data.data.response.data.message, {
           position: "bottom-right",
@@ -80,6 +79,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       }
     } catch (error: any) {
       if (error.response.status === 422) {
+        toast.warn(error.response.data.message, {
+          position: "bottom-right",
+        });
+      }
+      if (error.response.status === 500) {
         toast.warn(error.response.data.message, {
           position: "bottom-right",
         });

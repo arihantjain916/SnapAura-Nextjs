@@ -52,13 +52,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     try {
       const res = await AxiosInstance.post("/auth/login", data);
-      console.log(res.data.status);
       if (res.data.status === "success") {
         dispatch(
           userdata({
             isAuthenticated: true,
             username: res.data.data.username,
             email: res.data.data.email,
+            name: res.data.data.name ?? "",
+            profile: res.data.data.profile ?? null,
           })
         );
         Cookies.set("AUTH_TOKEN", res.data.token, { expires: 7 });
@@ -76,6 +77,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         toast.warn(error.response.data.message, {
           position: "bottom-right",
         });
+      } else if (error.response.status === 500) {
+        Cookies.set("isEmailVerified", "no", { expires: 1 });
+        router.push(`/auth/account-lock?email=${data.email}`);
       } else {
         toast.warn(error.response.data.message, {
           position: "bottom-right",
