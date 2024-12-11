@@ -83,6 +83,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           position: "bottom-right",
         });
       }
+      if (error.response.status === 500) {
+        toast.warn(error.response.data.message, {
+          position: "bottom-right",
+        });
+      }
       setIsLoading(false);
     } finally {
       setIsLoading(false);
