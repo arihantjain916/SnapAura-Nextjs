@@ -65,7 +65,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         name: "Create",
-        url: "/create",
+        url: "/feed/create",
         icon: CirclePlus,
         active: pathname === "/feed/create",
       },

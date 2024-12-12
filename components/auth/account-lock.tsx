@@ -2,6 +2,7 @@
 
 import Custom404 from "@/app/not-found";
 import AxiosInstance from "@/lib/axiosInstance";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -73,9 +74,9 @@ export const AccountLock = () => {
           </div>
           <p className="mt-4 text-sm text-gray-500 text-center">
             Need help?{" "}
-            <a href="#" className="text-indigo-500 hover:underline">
+            <Link href="#" className="text-indigo-500 hover:underline">
               Contact Support
-            </a>
+            </Link>
           </p>
         </div>
       </div>
