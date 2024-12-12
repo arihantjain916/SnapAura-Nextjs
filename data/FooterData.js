@@ -1,3 +1,10 @@
+import {
+  GitHubLogoIcon,
+  LinkedInLogoIcon,
+  InstagramLogoIcon,
+  TwitterLogoIcon,
+} from "@radix-ui/react-icons";
+
 export const FooterData = [
   {
     id: 1,
@@ -71,5 +78,32 @@ export const FooterData = [
         text: "Live Chat",
       },
     ],
+  },
+];
+
+export const SocialMediaData = [
+  {
+    id: 1,
+    link: "https://github.com/arihantjain916",
+    icon: <GitHubLogoIcon />,
+    name: "GitHub",
+  },
+  {
+    id: 2,
+    link: "https://www.linkedin.com/in/arihantjain916/",
+    icon: <LinkedInLogoIcon />,
+    name: "LinkedIn",
+  },
+  {
+    id: 3,
+    link: "https://www.instagram.com/arihantjain916/",
+    icon: <InstagramLogoIcon />,
+    name: "Instagram",
+  },
+  {
+    id: 4,
+    link: "https://x.com/arihantjain916",
+    icon: <TwitterLogoIcon />,
+    name: "Twitter",
   },
 ];
