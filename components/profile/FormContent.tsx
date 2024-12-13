@@ -56,7 +56,6 @@ export function FormContent({ className, ...props }: UserProfileType) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
 
   const form = useForm<UserProfileSchemaType>({
@@ -74,20 +73,19 @@ export function FormContent({ className, ...props }: UserProfileType) {
     }
   };
 
-  const onCropComplete = (croppedArea: any, croppedAreaPixels: any) => {
+  const onCropComplete = async(croppedArea: any, croppedAreaPixels: any) => {
     setCroppedAreaPixels(croppedAreaPixels);
-  };
-
-  const showCroppedImage = async () => {
     if (imageUrl && croppedAreaPixels) {
       try {
-        const croppedImage = await getCroppedImg(imageUrl, croppedAreaPixels, rotation);
+        const croppedImage = await getCroppedImg(imageUrl, croppedAreaPixels, 0);
         setImage(croppedImage);
       } catch (error) {
         console.error("Error cropping image:", error);
       }
     }
   };
+
+
 
   const onSubmit = async (data: UserProfileSchemaType) => {
     try {
@@ -162,9 +160,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
                       onZoomChange={setZoom}
                     />
                   </div>
-                  <Button type="button" onClick={showCroppedImage}>
-                    Crop Image
-                  </Button>
+
                 </div>
               )}
 
