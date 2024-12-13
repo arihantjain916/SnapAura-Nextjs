@@ -85,7 +85,9 @@ export const Footer = () => {
 
             <div className="mt-4 border-t border-gray-100 pt-8">
               <p className="text-center text-xs/relaxed text-gray-500 dark:text-gray-400">
-                © SnapAura 2024. All rights reserved.
+                © SnapAura {
+                  new Date().getFullYear()
+                }. All rights reserved.
               </p>
             </div>
           </div>
