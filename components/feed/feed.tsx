@@ -6,8 +6,11 @@ import AxiosInstance from "@/lib/axiosInstance";
 import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export const Feed = () => {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   async function fetchFeed() {
     try {
       const res = await AxiosInstance.get("/post", {
@@ -120,7 +123,13 @@ export const Feed = () => {
               <div className="px-3 pb-2">
                 {/* Likes */}
                 <div className="pt-2 flex gap-2 items-center">
-                  <button onClick={() => handleLike(feed.id)}>
+                  <button
+                    onClick={
+                      isAuthenticated
+                        ? () => handleLike(feed.id)
+                        : () => undefined
+                    }
+                  >
                     <Heart className={feed.isLiked && "fill-red-500"} />
                   </button>
                   <span className="text-base mb-2 cursor-pointer">
