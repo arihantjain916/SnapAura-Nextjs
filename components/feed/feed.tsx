@@ -83,7 +83,9 @@ export const Feed = () => {
                 <button>
                   <Heart />
                 </button>
-                <span className="text-base mb-2 cursor-pointer">12 likes</span>
+                <span className="text-base mb-2 cursor-pointer">
+                  {feed.totalLikes} likes
+                </span>
               </div>
 
               {/* Description */}
