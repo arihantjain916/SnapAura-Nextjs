@@ -2,6 +2,7 @@
 
 import AxiosInstance from "@/lib/axiosInstance";
 import Cookies from "js-cookie";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const AccountVerify = (props: {
@@ -46,12 +47,12 @@ const AccountVerify = (props: {
         </div>
         <div className="text-sm text-slate-500 mt-4">
           Didn't receive code?{" "}
-          <a
+          <Link
             className="font-medium text-indigo-500 hover:text-indigo-600"
             href="#0"
           >
             Resend
-          </a>
+          </Link>
         </div>
       </div>
     </div>

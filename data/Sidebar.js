@@ -25,7 +25,7 @@ export const DATA = [
   },
   {
     name: "Create",
-    url: "/create",
+    url: "/feed/create",
     icon: CirclePlus,
   },
   {
