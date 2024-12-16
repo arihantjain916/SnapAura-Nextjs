@@ -69,15 +69,21 @@ export function FormContent({ className, ...props }: UserProfileType) {
       setImage(file);
       setImageUrl(URL.createObjectURL(file));
     } else {
-      toast.error("Please select a valid image file.", { position: "bottom-right" });
+      toast.error("Please select a valid image file.", {
+        position: "bottom-right",
+      });
     }
   };
 
-  const onCropComplete = async(croppedArea: any, croppedAreaPixels: any) => {
+  const onCropComplete = async (croppedArea: any, croppedAreaPixels: any) => {
     setCroppedAreaPixels(croppedAreaPixels);
     if (imageUrl && croppedAreaPixels) {
       try {
-        const croppedImage = await getCroppedImg(imageUrl, croppedAreaPixels, 0);
+        const croppedImage = await getCroppedImg(
+          imageUrl,
+          croppedAreaPixels,
+          0
+        );
         setImage(croppedImage);
       } catch (error) {
         console.error("Error cropping image:", error);
@@ -116,7 +122,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
         );
         form.reset({ email, username, name });
         setImage(null);
-        setImageUrl(null)
+        setImageUrl(null);
         toast.success(res.data.message, { position: "bottom-right" });
       } else {
         toast.warn(res.data.message, { position: "bottom-right" });
@@ -137,11 +143,18 @@ export function FormContent({ className, ...props }: UserProfileType) {
               {/* Profile Image Field */}
               <div className="flex flex-col md:flex-row gap-2">
                 <Avatar>
-                  <AvatarImage src={profile || "https://github.com/shadcn.png"} alt="Profile" />
+                  <AvatarImage
+                    src={profile || "https://github.com/shadcn.png"}
+                    alt="Profile"
+                  />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <FormControl>
-                  <Input type="file" accept="image/*" onChange={handleFileChange} />
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
                 </FormControl>
               </div>
 
@@ -158,7 +171,6 @@ export function FormContent({ className, ...props }: UserProfileType) {
                       onZoomChange={setZoom}
                     />
                   </div>
-
                 </div>
               )}
 
@@ -170,7 +182,12 @@ export function FormContent({ className, ...props }: UserProfileType) {
                   <FormItem>
                     <FormLabel>Email*</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="example@mail.com" {...field} />
+                      <Input
+                        type="email"
+                        placeholder="example@mail.com"
+                        {...field}
+                        disabled
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -200,7 +217,12 @@ export function FormContent({ className, ...props }: UserProfileType) {
                   <FormItem>
                     <FormLabel>Username*</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Username" {...field} />
+                      <Input
+                        type="text"
+                        placeholder="Username"
+                        {...field}
+                        disabled
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
