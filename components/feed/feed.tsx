@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import SimpleImageSlider from "react-simple-image-slider";
 
 export const Feed = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -111,14 +112,19 @@ export const Feed = () => {
                   <i className="fas fa-ellipsis-h pt-2 text-lg"></i>
                 </span>
               </div>
-
-              {/* Image Section */}
-              <img
-                className="w-full bg-cover pointer-events-none"
-                src={feed.image}
-                alt={feed.user.username}
-              />
-
+              {feed.image.length === 1 ? (
+                <img src={feed.image} alt={feed.user.username} />
+              ) : (
+                <>
+                  <SimpleImageSlider
+                    width={481}
+                    height={500}
+                    images={feed.image}
+                    showBullets={true}
+                    showNavs={true}
+                  />
+                </>
+              )}
               {/* Content Section */}
               <div className="px-3 pb-2">
                 {/* Likes */}
