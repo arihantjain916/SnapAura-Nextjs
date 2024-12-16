@@ -85,8 +85,6 @@ export function FormContent({ className, ...props }: UserProfileType) {
     }
   };
 
-
-
   const onSubmit = async (data: UserProfileSchemaType) => {
     try {
       const formData = new FormData();
