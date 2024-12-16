@@ -63,28 +63,25 @@ export function FormContent({ className, ...props }: UserProfileType) {
         },
       });
 
-      console.log(res);
-      //   if (res.data.status) {
-      //     toast.success(res.data.message, {
-      //       position: "bottom-right",
-      //     });
-      //     // window.location.reload();
-      //   } else {
-      //     toast.warn(res.data.message, {
-      //       position: "bottom-right",
-      //     });
-      //   }
+      if (res.data.success) {
+        toast.success(res.data.message, {
+          position: "bottom-right",
+        });
+      } else {
+        toast.warn(res.data.message, {
+          position: "bottom-right",
+        });
+      }
     } catch (error: any) {
-      //   if (error.response.status === 422) {
-      //     toast.warn(error.response.data.message, {
-      //       position: "bottom-right",
-      //     });
-      //   } else {
-      //     toast.warn(error.response.data.message, {
-      //       position: "bottom-right",
-      //     });
-      //   }
-      console.log(error);
+        if (error.response.status === 422) {
+          toast.warn(error.response.data.message, {
+            position: "bottom-right",
+          });
+        } else {
+          toast.warn(error.response.data.message, {
+            position: "bottom-right",
+          });
+        }
     }
     form.reset();
   }
