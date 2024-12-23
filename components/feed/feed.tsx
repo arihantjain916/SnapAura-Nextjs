@@ -9,7 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import SimpleImageSlider from "react-simple-image-slider";
-import { AxiosError } from "axios";
 
 export const Feed = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -34,6 +33,22 @@ export const Feed = () => {
     refetchInterval: 500000,
   });
 
+  if (error) {
+    return (
+      <div className="container mx-auto my-10 sm:px-20">
+        <div className="p-8 flex justify-center">
+          <div className="rounded overflow-hidden border w-full lg:w-6/12 md:w-6/12 bg-white mx-3">
+            <div className="px-3 pb-2">
+              <h1 className="text-center text-2xl font-bold dark:text-white">
+                Something went wrong
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (isPending) {
     return (
       <div className="container mx-auto my-10 sm:px-20">
@@ -45,27 +60,6 @@ export const Feed = () => {
           </div>
         </div>
       </div>
-    );
-  }
-
-  if (error) {
-    let errorMessage;
-    if (error instanceof AxiosError) {
-      if (error.response?.status === 500) {
-        errorMessage = error.response.data?.message || "Internal server error.";
-      } else {
-        errorMessage =
-          error.response?.data?.message ||
-          "An error occurred. Please try again later.";
-      }
-    } else {
-      errorMessage = "An error occurred. Please try again later.";
-    }
-
-    return (
-      <>
-        <h1>{errorMessage}</h1>
-      </>
     );
   }
 
@@ -115,7 +109,7 @@ export const Feed = () => {
                   </span>
                 </div>
                 <span className="px-2 hover:bg-gray-300 cursor-pointer rounded">
-                  <EllipsisIcon />
+                  <EllipsisIcon/>
                 </span>
               </div>
               {feed.image.length === 1 ? (

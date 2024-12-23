@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,63 +17,84 @@ import {
 import { cn } from "@/lib/utils";
 import { CardFooter } from "../ui/card";
 import { ToastContainer, toast } from "react-toastify";
-import AxiosInstance from "@/lib/axiosInstance";
 import "react-toastify/dist/ReactToastify.css";
+import AxiosInstance from "@/lib/axiosInstance";
 import Cookies from "js-cookie";
 import { userdata } from "@/redux/features/auth";
-import { ChangeEvent } from "react";
-import React from "react";
+import { ChangeEvent, useState } from "react";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "@/lib/image-formatter";
 
 interface UserProfileType extends React.HTMLAttributes<HTMLDivElement> {}
+
+const userProfileSchema = z.object({
+  email: z
+    .string()
+    .email("Invalid email.")
+    .optional()
+    .transform((val) => (val === "" ? undefined : val)),
+  name: z
+    .string()
+    .optional()
+    .transform((val) => (val === "" ? undefined : val)),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters.")
+    .optional()
+    .transform((val) => (val === "" ? undefined : val)),
+});
+
+type UserProfileSchemaType = z.infer<typeof userProfileSchema>;
 
 export function FormContent({ className, ...props }: UserProfileType) {
   const { username, email, profile, name } = useSelector(
     (state: RootState) => state.auth
   );
-  const [image, setImage] = React.useState<File | null>(null);
   const dispatch = useDispatch();
 
-  const userProfile = z.object({
-    email: z
-      .string()
-      .email("This is not a valid email.")
-      .optional()
-      .transform((val) => (val === "" ? undefined : val)),
-    name: z
-      .string()
-      .optional()
-      .transform((val) => (val === "" ? undefined : val)),
-    username: z
-      .string()
-      .min(3)
-      .optional()
-      .transform((val) => (val === "" ? undefined : val)),
-  });
+  const [image, setImage] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
 
-  type userProfileSchemaType = z.infer<typeof userProfile>;
-  const form = useForm<userProfileSchemaType>({
-    resolver: zodResolver(userProfile),
-    defaultValues: {
-      email: email ?? "",
-      username: username ?? "",
-      name: name ?? "",
-    },
+  const form = useForm<UserProfileSchemaType>({
+    resolver: zodResolver(userProfileSchema),
+    defaultValues: { email, username, name },
   });
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type.includes("image")) {
+    if (file && file.type.startsWith("image")) {
       setImage(file);
+      setImageUrl(URL.createObjectURL(file));
     } else {
-      alert("Please select a valid image file.");
+      toast.error("Please select a valid image file.", {
+        position: "bottom-right",
+      });
     }
   };
-  async function onSubmit(data: userProfileSchemaType) {
+
+  const onCropComplete = async (croppedArea: any, croppedAreaPixels: any) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+    if (imageUrl && croppedAreaPixels) {
+      try {
+        const croppedImage = await getCroppedImg(
+          imageUrl,
+          croppedAreaPixels,
+          0
+        );
+        setImage(croppedImage);
+      } catch (error) {
+        console.error("Error cropping image:", error);
+      }
+    }
+  };
+
+  const onSubmit = async (data: UserProfileSchemaType) => {
     try {
       const formData = new FormData();
-      if (image && typeof image !== "string") {
-        formData.append("profile", image);
-      }
+      if (image) formData.append("profile", image);
       formData.append("username", data.username || "");
       formData.append("email", data.email || "");
       formData.append("name", data.name || "");
@@ -89,43 +108,31 @@ export function FormContent({ className, ...props }: UserProfileType) {
           },
         }
       );
+
       if (res.data.status) {
+        const { username, email, profile, name } = res.data.data;
         dispatch(
           userdata({
             isAuthenticated: true,
-            username: res.data.data.username,
-            email: res.data.data.email,
-            profile: res.data.data.profile,
-            name: res.data.data.name,
+            username,
+            email,
+            profile,
+            name,
           })
         );
-        form.reset({
-          email: res.data.data.email,
-          username: res.data.data.username,
-          name: res.data.data.name,
-        });
-        toast.success(res.data.message, {
-          position: "bottom-right",
-        });
-        // window.location.reload();
+        form.reset({ email, username, name });
+        setImage(null);
+        setImageUrl(null);
+        toast.success(res.data.message, { position: "bottom-right" });
       } else {
-        toast.warn(res.data.message, {
-          position: "bottom-right",
-        });
+        toast.warn(res.data.message, { position: "bottom-right" });
       }
     } catch (error: any) {
-      if (error.response.status === 422) {
-        toast.warn(error.response.data.message, {
-          position: "bottom-right",
-        });
-      } else {
-        toast.warn(error.response.data.message, {
-          position: "bottom-right",
-        });
-      }
+      const message = error.response?.data?.message || "An error occurred.";
+      toast.error(message, { position: "bottom-right" });
     }
-    form.reset();
-  }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -133,12 +140,12 @@ export function FormContent({ className, ...props }: UserProfileType) {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid gap-2">
-              {/* profile Field */}
+              {/* Profile Image Field */}
               <div className="flex flex-col md:flex-row gap-2">
                 <Avatar>
                   <AvatarImage
-                    src={profile ?? "https://github.com/shadcn.png"}
-                    alt="@shadcn"
+                    src={profile || "https://github.com/shadcn.png"}
+                    alt="Profile"
                   />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
@@ -150,6 +157,23 @@ export function FormContent({ className, ...props }: UserProfileType) {
                   />
                 </FormControl>
               </div>
+
+              {image && (
+                <div className="flex flex-col items-center gap-4">
+                  <div className="relative w-64 h-64">
+                    <Cropper
+                      image={imageUrl!}
+                      crop={crop}
+                      zoom={zoom}
+                      aspect={4 / 3}
+                      onCropChange={setCrop}
+                      onCropComplete={onCropComplete}
+                      onZoomChange={setZoom}
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Email Field */}
               <FormField
                 control={form.control}
@@ -158,13 +182,19 @@ export function FormContent({ className, ...props }: UserProfileType) {
                   <FormItem>
                     <FormLabel>Email*</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="m@exp.com" {...field} />
+                      <Input
+                        type="email"
+                        placeholder="example@mail.com"
+                        {...field}
+                        disabled
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {/* Password Field */}
+
+              {/* Name Field */}
               <FormField
                 control={form.control}
                 name="name"
@@ -172,16 +202,14 @@ export function FormContent({ className, ...props }: UserProfileType) {
                   <FormItem>
                     <FormLabel>Name*</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        {...field}
-                        //   disabled={isLoading}
-                      />
+                      <Input type="text" placeholder="Your Name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
+              {/* Username Field */}
               <FormField
                 control={form.control}
                 name="username"
@@ -191,17 +219,21 @@ export function FormContent({ className, ...props }: UserProfileType) {
                     <FormControl>
                       <Input
                         type="text"
+                        placeholder="Username"
                         {...field}
-                        //   disabled={isLoading}
+                        disabled
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {/* Submit Button */}
+
+              {/* Submit Buttons */}
               <CardFooter className="flex justify-between mt-3">
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline" type="button">
+                  Cancel
+                </Button>
                 <Button type="submit">Update</Button>
               </CardFooter>
             </div>
