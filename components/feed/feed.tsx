@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import SimpleImageSlider from "react-simple-image-slider";
+import { AxiosError } from "axios";
 
 export const Feed = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -34,33 +35,16 @@ export const Feed = () => {
   });
 
   if (error) {
-    return (
-      <div className="container mx-auto my-10 sm:px-20">
-        <div className="p-8 flex justify-center">
-          <div className="rounded overflow-hidden border w-full lg:w-6/12 md:w-6/12 bg-white mx-3">
-            <div className="px-3 pb-2">
-              <h1 className="text-center text-2xl font-bold dark:text-white">
-                Something went wrong
-              </h1>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    let message;
+    if (error instanceof AxiosError) {
+      message = error?.response?.data.message;
+    }
+    console.log(message);
+    return <p>Something went wrong</p>;
   }
 
   if (isPending) {
-    return (
-      <div className="container mx-auto my-10 sm:px-20">
-        <div className="p-8 flex justify-center">
-          <div className="rounded overflow-hidden border w-full lg:w-6/12 md:w-6/12 bg-white mx-3">
-            <div className="px-3 pb-2">
-              <h1 className="text-center text-2xl font-bold">Loading...</h1>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <p>Loading...</p>;
   }
 
   async function handleLike(id: number) {
@@ -109,7 +93,7 @@ export const Feed = () => {
                   </span>
                 </div>
                 <span className="px-2 hover:bg-gray-300 cursor-pointer rounded">
-                  <EllipsisIcon/>
+                  <EllipsisIcon />
                 </span>
               </div>
               {feed.image.length === 1 ? (
