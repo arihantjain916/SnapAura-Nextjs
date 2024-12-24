@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { userdata } from "@/redux/features/auth";
+import AxiosInstance from "@/lib/axiosInstance";
 
 export const OAuthCallback = () => {
   const pathname = usePathname();
@@ -17,10 +18,14 @@ export const OAuthCallback = () => {
 
   async function handleCallback() {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/oauth/${params.provider}/callback?code=${searchParams.get(
-          "code"
-        )}`
+      //   const res = await axios.get(
+      //     `http://localhost:8000/api/oauth/${params.provider}/callback?code=${searchParams.get(
+      //       "code"
+      //     )}`
+      //   );
+
+      const res = await AxiosInstance.get(
+        `/oauth/${params.provider}/callback?code=${searchParams.get("code")}`
       );
       console.log(res.data);
       if (res.data.status === "success") {
@@ -37,6 +42,7 @@ export const OAuthCallback = () => {
         router.push("/");
       }
     } catch (err) {
+        console.log(err);
       router.push("/auth/login");
     }
   }

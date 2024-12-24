@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
+import AxiosInstance from "@/lib/axiosInstance";
 import axios from "axios";
 
 export const GitHubBtn = () => {
   async function handleGitHubLogin() {
     try {
-      const res = await axios.get("http://localhost:8000/api/oauth/github");
-      console.log(res.data);
+      const res = await AxiosInstance.get(`/oauth/github`);
       if (res.data.status === "success") {
         window.location.href = res.data.url;
       }

@@ -6,8 +6,7 @@ import axios from "axios";
 export const GoogleBtn = () => {
   async function handleGoogleSignIn() {
     try{
-        const res = await axios.get("http://localhost:8000/api/oauth/google");
-        console.log(res.data);
+        const res = await AxiosInstance.get(`/oauth/google`);
         if(res.data.status === 'success'){
             window.location.href = res.data.url;
         }
