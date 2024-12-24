@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +26,8 @@ import { userdata } from "@/redux/features/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EmailSent } from "../email-send";
+import { GitHubBtn } from "../OAuth/GithubBtn";
+import { GoogleBtn } from "../OAuth/GoogleBtn";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -95,14 +96,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     form.reset();
   }
-
-  const handleGoogleSignIn = () => {
-    signIn("google");
-  };
-
-  const handleGithubSignIn = () => {
-    signIn("github");
-  };
 
   return (
     <>
@@ -187,32 +180,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </span>
           </div>
         </div>
-        <Button
-          variant="outline"
-          type="button"
-          disabled={isLoading}
-          onClick={handleGithubSignIn}
-        >
-          {isLoading ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Icons.gitHub className="mr-2 h-4 w-4" />
-          )}{" "}
-          Github
-        </Button>
-        <Button
-          variant="outline"
-          type="button"
-          disabled={isLoading}
-          onClick={handleGoogleSignIn}
-        >
-          {isLoading ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Icons.google className="mr-2 h-4 w-4" />
-          )}{" "}
-          Google
-        </Button>
+        <GitHubBtn />
+        <GoogleBtn />
       </div>
     </>
   );
