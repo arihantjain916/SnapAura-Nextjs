@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -93,15 +92,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
     form.reset();
   }
-
-  const handleGoogleSignIn = () => {
-    signIn("google");
-  };
-
-  const handleGithubSignIn = () => {
-    signIn("github");
-  };
-
+  
   return (
     <>
       <ToastContainer />
