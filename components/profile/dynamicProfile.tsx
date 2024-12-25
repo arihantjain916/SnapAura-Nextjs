@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Stats } from "./component/stats";
 import { TabItem } from "./component/tabs";
+import { Posts } from "./component/posts";
 
 export const DynamicProfile = () => {
   const router = useRouter();
@@ -39,10 +40,7 @@ export const DynamicProfile = () => {
       followers: data?.followers?.length ?? 0,
       following: data?.following?.length ?? 0,
     },
-    profileImage:
-      "https://images.unsplash.com/photo-1502791451862-7bd8c1df43a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80",
   };
-
 
   function handleEdit() {
     router.push("/profile");
@@ -55,7 +53,7 @@ export const DynamicProfile = () => {
           <div className="md:w-3/12 md:ml-16">
             <img
               className="w-20 h-20 md:w-40 md:h-40 object-cover rounded-full border-2 border-pink-600 p-1"
-              src={user.profileImage}
+              src={data?.profile}
               alt="profile"
             />
           </div>
@@ -128,6 +126,8 @@ export const DynamicProfile = () => {
               href="#"
             />
           </ul>
+
+          <Posts post={data?.posts} />
         </div>
       </div>
     </main>
