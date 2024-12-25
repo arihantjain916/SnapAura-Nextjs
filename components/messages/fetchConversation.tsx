@@ -67,7 +67,7 @@ export const FetchConversation = () => {
     <div>
       <div className="flex h-screen bg-primary-bg">
         <div
-          className={`border-r border-r-slate-700 px-4 py-4 w-full md:w-1/3 lg:w-1/4 ${selectedConversation ? "hidden" : ""}`}
+          className={`border-r border-r-slate-700 px-4 py-4 w-full md:w-1/3 lg:w-1/4 ${selectedConversation ? "hidden md:block" : ""}`}
         >
           <div className="relative flex items-center">
             <svg
@@ -165,7 +165,7 @@ export const FetchConversation = () => {
           className={`flex flex-col w-full ${selectedConversation ? "block" : "hidden md:block"} md:w-2/3 lg:w-3/4`}
         >
           {selectedConversation ? (
-            <ChatComponent conversation={selectedConversation} />
+            <ChatComponent conversation={selectedConversation} setSelectedConversation={setSelectedConversation} />
           ) : (
             <div className="flex items-center justify-center w-full">
               <p>Select a conversation to start chatting.</p>
