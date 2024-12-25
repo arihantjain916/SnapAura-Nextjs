@@ -76,7 +76,7 @@ export const FetchConversation = () => {
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="absolute ml-2 h-5 w-5 text-slate-400"
+              className="absolute ml-2 h-5 w-5 text-slate-400 dark:text-slate-500"
             >
               <path
                 strokeLinecap="round"
@@ -87,7 +87,7 @@ export const FetchConversation = () => {
             <input
               type="text"
               placeholder="Search"
-              className="w-full rounded-md border-none bg-[#343143] py-2 pl-9 pr-3 text-slate-200 focus:outline-none"
+              className="w-full rounded-md border-none bg-slate-100 dark:bg-slate-800 py-2 pl-9 pr-3 text-slate-700 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
             />
           </div>
 
@@ -165,7 +165,10 @@ export const FetchConversation = () => {
           className={`flex flex-col w-full ${selectedConversation ? "block" : "hidden md:block"} md:w-2/3 lg:w-3/4`}
         >
           {selectedConversation ? (
-            <ChatComponent conversation={selectedConversation} setSelectedConversation={setSelectedConversation} />
+            <ChatComponent
+              conversation={selectedConversation}
+              setSelectedConversation={setSelectedConversation}
+            />
           ) : (
             <div className="flex items-center justify-center w-full">
               <p>Select a conversation to start chatting.</p>
