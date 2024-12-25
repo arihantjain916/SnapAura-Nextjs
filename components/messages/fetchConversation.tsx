@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
+import { ChatComponent } from "./chatComponent";
 
 export const FetchConversation = () => {
   async function fetchConversation() {
@@ -131,6 +132,7 @@ export const FetchConversation = () => {
             })}
           </div>
         </div>
+        <ChatComponent />
       </div>
     </div>
   );
