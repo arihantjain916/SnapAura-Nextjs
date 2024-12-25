@@ -8,7 +8,10 @@ import { Input } from "../ui/input";
 import { useState } from "react";
 import { Button } from "../ui/button";
 
-export const ChatComponent = ({ conversation, user }: any) => {
+export const ChatComponent = ({
+  conversation,
+  setSelectedConversation,
+}: any) => {
   const [emojiDisplay, setEmojiDisplay] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
@@ -22,18 +25,35 @@ export const ChatComponent = ({ conversation, user }: any) => {
 
   const sendMessage = () => {
     console.log(inputValue);
+    setInputValue("")
     // Add logic for sending a message (e.g., an API call)
   };
 
   return (
     <div className="flex-1 flex flex-col h-screen max-h-full">
       <div className="flex items-center gap-2 px-3 py-2 border-b border-b-slate-700 sm:px-4 sm:py-3">
-        <div className="h-[42px] w-[42px] shrink-0 rounded-full">
-          <img
-            src={conversation.convo.otherParty.profile}
-            className="h-full w-full rounded-full object-cover"
-            alt="Profile"
-          />
+        <div className="flex items-center">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="mr-2 md:hidden"
+            onClick={() => setSelectedConversation(null)}
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </Button>
+          <Avatar className="h-12 w-12">
+            <AvatarImage
+              className="w-full h-full rounded-full object-cover"
+              src={conversation.convo.otherParty.profile}
+              alt={conversation.convo.otherParty.username}
+            />
+            <AvatarFallback>
+              {conversation.convo.otherParty.username
+                .split(" ")
+                .map((n: any[]) => n[0])
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
         </div>
         <div>
           <h2 className="text-base text-slate-200 text-sm sm:text-base">
@@ -59,18 +79,23 @@ export const ChatComponent = ({ conversation, user }: any) => {
         </div>
       )}
 
-      <div className="flex items-center gap-3 p-3 bg-slate-900 rounded-lg shadow-md py-4 mt-auto mb-12 sm:mb-4 sm:py-4 sm:p-4">
+      <div className="flex items-center gap-3 p-3 bg-slate-900 rounded-lg shadow-md py-4 mt-auto sm:mb-[3.3rem] sm:py-4 sm:p-4 mb-[7.3rem]">
         <button
           onClick={() => setEmojiDisplay((prev) => !prev)}
           className="flex items-center justify-center w-10 h-10 text-lg bg-slate-700 text-white rounded-full hover:bg-slate-600 focus:outline-none"
         >
           😂
         </button>
-        <input
+        <Input
           type="text"
           value={inputValue}
           onChange={handleInputChange}
           placeholder="Type a message..."
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              sendMessage();
+            }
+          }}
           className="flex-1 px-4 py-2 bg-slate-800 text-slate-200 placeholder:text-slate-400 border border-slate-700 rounded-lg focus:outline-none focus:ring focus:ring-slate-500 focus:ring-opacity-50 sm:px-3 sm:py-3 sm:text-base"
         />
         <button
