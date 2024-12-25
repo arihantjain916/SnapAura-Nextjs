@@ -4,8 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { ChatComponent } from "./chatComponent";
+import { useState } from "react";
 
 export const FetchConversation = () => {
+  const [selectedConversation, setSelectedConversation] = useState(null);
   async function fetchConversation() {
     try {
       const res = await axios.get("/chat/conversation", {
@@ -109,7 +111,10 @@ export const FetchConversation = () => {
 
               return (
                 <div key={convo.id}>
-                  <button className="flex items-center gap-2 rounded-md px-2 py-2 transition-colors duration-300 hover:bg-light">
+                  <button
+                    className="flex items-center gap-2 rounded-md px-2 py-2 transition-colors duration-300 hover:bg-light"
+                    onClick={() => setSelectedConversation(convo)}
+                  >
                     <div className="h-[42px] w-[42px] shrink-0 rounded-full">
                       <img
                         src={
@@ -132,7 +137,13 @@ export const FetchConversation = () => {
             })}
           </div>
         </div>
-        <ChatComponent />
+        {selectedConversation ? (
+          <ChatComponent conversation={selectedConversation} />
+        ) : (
+          <div className="flex items-center justify-center w-full">
+            <p>Select a conversation to start chatting.</p>
+          </div>
+        )}
       </div>
     </div>
   );
