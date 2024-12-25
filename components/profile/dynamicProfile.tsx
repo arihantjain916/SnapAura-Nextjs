@@ -8,6 +8,7 @@ import { useSelector, UseSelector } from "react-redux";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Stats } from "./component/stats";
 
 export const DynamicProfile = () => {
   const router = useRouter();
@@ -41,31 +42,6 @@ export const DynamicProfile = () => {
       "https://images.unsplash.com/photo-1502791451862-7bd8c1df43a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80",
   };
 
-  console.log(data);
-
-  const Stats = ({
-    stats,
-    className,
-  }: {
-    stats: {
-      posts: number;
-      followers: string;
-      following: number;
-    };
-    className?: string;
-  }) => (
-    <ul className={`flex ${className}`}>
-      <li>
-        <span className="font-semibold">{stats.posts}</span> posts
-      </li>
-      <li>
-        <span className="font-semibold">{stats.followers}</span> followers
-      </li>
-      <li>
-        <span className="font-semibold">{stats.following}</span> following
-      </li>
-    </ul>
-  );
 
   const TabItem = ({
     icon,
