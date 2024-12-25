@@ -56,10 +56,10 @@ export const ChatComponent = ({
           </Avatar>
         </div>
         <div>
-          <h2 className="text-base text-slate-200 text-sm sm:text-base">
+          <h2 className="text-base text-black text-sm sm:text-base dark:text-white">
             {conversation.convo.otherParty.username}
           </h2>
-          <p className="text-xs text-slate-400 sm:text-sm">Online 3 min ago</p>
+          <p className="text-xs text-slate-600 sm:text-sm dark:text-slate-400">Online 3 min ago</p>
         </div>
       </div>
 
@@ -79,7 +79,7 @@ export const ChatComponent = ({
         </div>
       )}
 
-      <div className="flex items-center gap-3 p-3 bg-slate-900 rounded-lg shadow-md py-4 mt-auto sm:mb-[3.3rem] sm:py-4 sm:p-4 mb-[7.3rem]">
+      <div className="flex items-center gap-3 p-3 bg-slate-800 dark:bg-slate-900 rounded-lg shadow-md py-4 mt-auto sm:mb-[3.3rem] sm:py-4 sm:p-4 mb-[7.3rem]">
         <button
           onClick={() => setEmojiDisplay((prev) => !prev)}
           className="flex items-center justify-center w-10 h-10 text-lg bg-slate-700 text-white rounded-full hover:bg-slate-600 focus:outline-none"

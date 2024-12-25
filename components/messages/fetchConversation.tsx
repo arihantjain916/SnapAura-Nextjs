@@ -92,7 +92,7 @@ export const FetchConversation = () => {
           </div>
 
           <div className="mt-5 flex items-center">
-            <div className="flex items-center gap-2 text-slate-200">
+            <div className="flex items-center gap-2 text-dark dark:text-slate-200">
               <p className="font-medium">Messages</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +116,7 @@ export const FetchConversation = () => {
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="ml-auto h-5 w-5 text-slate-300"
+              className="ml-auto h-5 w-5 text-dark dark:text-slate-300"
             >
               <path
                 strokeLinecap="round"
@@ -150,7 +150,7 @@ export const FetchConversation = () => {
                       />
                     </div>
                     <div className="overflow-hidden text-left">
-                      <h2 className="truncate text-sm font-medium text-slate-200">
+                      <h2 className="truncate text-sm font-medium text-black dark:text-white">
                         {nameToDisplay}
                       </h2>
                     </div>

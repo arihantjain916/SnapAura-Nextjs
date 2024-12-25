@@ -25,6 +25,8 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
+import { useTheme } from "next-themes";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { username, email, profile } = useSelector(
@@ -77,6 +79,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
     ],
   };
+  const { theme, setTheme } = useTheme();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -90,6 +93,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavProjects projects={data.projects} />
+        <Button onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+          Dark Mode
+        </Button>
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />
