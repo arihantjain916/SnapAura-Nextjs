@@ -5,9 +5,14 @@ import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { ChatComponent } from "./chatComponent";
 import { useState } from "react";
+interface ConversationState {
+  convo: any;
+  senderId: number;
+}
 
 export const FetchConversation = () => {
-  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [selectedConversation, setSelectedConversation] =
+    useState<ConversationState | null>(null);
   async function fetchConversation() {
     try {
       const res = await axios.get("/chat/conversation", {
@@ -113,7 +118,12 @@ export const FetchConversation = () => {
                 <div key={convo.id}>
                   <button
                     className="flex items-center gap-2 rounded-md px-2 py-2 transition-colors duration-300 hover:bg-light"
-                    onClick={() => setSelectedConversation(convo)}
+                    onClick={() =>
+                      setSelectedConversation({
+                        convo: convo,
+                        senderId: data.authUserId,
+                      })
+                    }
                   >
                     <div className="h-[42px] w-[42px] shrink-0 rounded-full">
                       <img
