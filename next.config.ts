@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
       {
         source: "/chat/:path*",
         // destination: "http://localhost:3001/:path*",
-        destination: "https://snapaura-chat.vercel.app/:path*",
+        destination: `${process.env.NODE_BACKEND_URL}/:path*`,
       },
     ];
   },
