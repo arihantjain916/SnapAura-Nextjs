@@ -1,7 +1,12 @@
 "use client";
 
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 import EmojiPicker from "emoji-picker-react";
-import {useState } from "react";
+import { ChevronLeft, Send } from "lucide-react";
+import { Input } from "../ui/input";
+import { useState } from "react";
+import { Button } from "../ui/button";
 
 export const ChatComponent = ({ conversation, user }: any) => {
   const [emojiDisplay, setEmojiDisplay] = useState(false);
@@ -19,42 +24,6 @@ export const ChatComponent = ({ conversation, user }: any) => {
     console.log(inputValue);
     // Add logic for sending a message (e.g., an API call)
   };
-
-  // const renderMessage = (message: any, isSender: boolean) => (
-  //   <div className={`flex ${isSender ? "flex-row-reverse" : ""} gap-3`}>
-  //     <div className="h-[45px] w-[45px] shrink-0 rounded-full">
-  //       <img
-  //         src={isSender ? user.profile : message.profile}
-  //         className="h-full w-full rounded-full object-cover"
-  //         alt="Avatar"
-  //       />
-  //     </div>
-  //     <div className="overflow-hidden">
-  //       <h2 className="truncate text-sm text-slate-200">
-  //         {isSender ? "You" : message.username}
-  //         <span className="text-xs text-slate-400"> 9:00</span>{" "}
-  //       </h2>
-  //       <div
-  //         className={`mt-2 ${isSender ? "bg-blue-600" : "bg-indigo-600"} px-2 py-1.5 rounded-md`}
-  //       >
-  //         <p className="truncate text-sm text-slate-100">{message.text}</p>
-  //       </div>
-  //       {/* Media (if any) */}
-  //       {message.media && (
-  //         <div className="grid h-64 grid-cols-6 grid-rows-6 gap-3">
-  //           {message.media.map((src: string, index: number) => (
-  //             <img
-  //               key={index}
-  //               src={src}
-  //               alt="Media"
-  //               className="col-span-3 row-span-4 h-full w-full rounded-md object-cover"
-  //             />
-  //           ))}
-  //         </div>
-  //       )}
-  //     </div>
-  //   </div>
-  // );
 
   return (
     <div className="flex-1 flex flex-col h-screen max-h-full">
@@ -84,7 +53,9 @@ export const ChatComponent = ({ conversation, user }: any) => {
 
       {emojiDisplay && (
         <div className="absolute bottom-20 left-0 right-0 px-4">
-          <EmojiPicker onEmojiClick={(emoji) => handleEmojiClick(emoji.emoji)} />
+          <EmojiPicker
+            onEmojiClick={(emoji) => handleEmojiClick(emoji.emoji)}
+          />
         </div>
       )}
 
@@ -110,5 +81,59 @@ export const ChatComponent = ({ conversation, user }: any) => {
         </button>
       </div>
     </div>
+
+    // <>
+    //   <div className="bg-white dark:bg-black p-4 flex items-center border-b border-gray-200 dark:border-gray-700">
+    //     <Button variant="ghost" size="icon" className="mr-2 md:hidden">
+    //       <ChevronLeft className="h-6 w-6" />
+    //     </Button>
+    //     <Avatar className="h-10 w-10">
+    //       <AvatarImage src={"Arihant"} alt={"Arihant"} />
+    //       <AvatarFallback>
+    //         {"Arihant"
+    //           .split(" ")
+    //           .map((n) => n[0])
+    //           .join("")}
+    //       </AvatarFallback>
+    //     </Avatar>
+    //     <h2 className="ml-4 text-xl font-semibold">{"Arihant"}</h2>
+    //   </div>
+    //   {/* <ScrollArea className="flex-1 p-4">
+    //     {messages.map((message) => (
+    //       <div
+    //         key={message.id}
+    //         className={`flex ${message.senderId === "me" ? "justify-end" : "justify-start"} mb-4`}
+    //       >
+    //         <div
+    //           className={`max-w-[70%] p-3 rounded-lg ${
+    //             message.senderId === "me"
+    //               ? "bg-blue-500 text-white"
+    //               : "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+    //           }`}
+    //         >
+    //           <p>{message.text}</p>
+    //           <span className="text-xs mt-1 block opacity-70">
+    //             {message.timestamp}
+    //           </span>
+    //         </div>
+    //       </div>
+    //     ))}
+    //   </ScrollArea> */}
+    //   <div className="bg-white dark:bg-black p-4 border-t border-gray-200 dark:border-gray-700">
+    //     <div className="flex items-center">
+    //       <Input
+    //         type="text"
+    //         placeholder="Type a message..."
+    //         value={inputValue}
+    //         onChange={handleInputChange}
+    //         className="flex-1 mr-2 bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
+    //         onKeyUpCapture={(e) => e.key === "Enter" && sendMessage()}
+    //       />
+    //       <Button onClick={sendMessage}>
+    //         <Send className="h-4 w-4" />
+    //       </Button>
+    //     </div>
+    //   </div>
+    // </>
   );
 };
