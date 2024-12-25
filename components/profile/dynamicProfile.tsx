@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Stats } from "./component/stats";
+import { TabItem } from "./component/tabs";
 
 export const DynamicProfile = () => {
   const router = useRouter();
@@ -43,30 +44,6 @@ export const DynamicProfile = () => {
   };
 
 
-  const TabItem = ({
-    icon,
-    label,
-    href,
-    isActive,
-  }: {
-    icon: string;
-    label: string;
-    href: string;
-    isActive?: boolean;
-  }) => (
-    <li
-      className={`${
-        isActive
-          ? "md:border-t md:border-gray-700 dark:md:border-white md:text-gray-700 dark:md:text-white"
-          : ""
-      }`}
-    >
-      <a className="inline-block p-3" href={href}>
-        <i className={icon}></i>
-        <span className="hidden md:inline">{label}</span>
-      </a>
-    </li>
-  );
   function handleEdit() {
     router.push("/profile");
   }
