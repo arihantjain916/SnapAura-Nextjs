@@ -30,7 +30,7 @@ export const DATA = [
   },
   {
     name: "Chat",
-    url: "/chat",
+    url: "/messages",
     icon: MessageCircle,
   },
   {

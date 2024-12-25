@@ -85,7 +85,7 @@ export const ChatComponent = ({ conversation, user }: any) => {
         <EmojiPicker onEmojiClick={(emoji) => handleEmojiClick(emoji.emoji)} />
       )}
 
-      <div className="flex items-center gap-3 p-3 bg-slate-900 rounded-lg shadow-md py-4 mt-auto">
+      <div className="flex items-center gap-3 p-3 bg-slate-900 rounded-lg shadow-md py-4 mt-auto mb-12">
         <button
           onClick={() => setEmojiDisplay((prev) => !prev)}
           className="flex items-center justify-center w-10 h-10 text-lg bg-slate-700 text-white rounded-full hover:bg-slate-600 focus:outline-none"
