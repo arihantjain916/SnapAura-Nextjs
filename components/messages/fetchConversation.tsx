@@ -5,12 +5,17 @@ import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { ChatComponent } from "./chatComponent";
 import { useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useRouter } from "next/navigation";
 interface ConversationState {
   convo: any;
-  senderId: number;
+  senderId: string;
 }
 
 export const FetchConversation = () => {
+  const router = useRouter();
+  const isMobile = useIsMobile();
+
   const [selectedConversation, setSelectedConversation] =
     useState<ConversationState | null>(null);
   async function fetchConversation() {
@@ -46,10 +51,21 @@ export const FetchConversation = () => {
     return <p>Loading...</p>;
   }
 
+  function handleConvoSelect(convo: any, id: string) {
+    if (isMobile) {
+      console.log(convo.id);
+    } else {
+      setSelectedConversation({
+        convo: convo,
+        senderId: id,
+      });
+    }
+  }
+
   return (
     <div>
       <div className="flex min-h-screen w-full bg-primary-bg">
-        <div className="w-[270px] border-r border-r-slate-700 px-4 py-4">
+        <div className="border-r border-r-slate-700 px-4 py-4 md:w-[270px] w-full">
           <div className="relative flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -113,17 +129,11 @@ export const FetchConversation = () => {
               const nameToDisplay = isAuthUserSender
                 ? convo.otherParty.username
                 : convo.senderName.username;
-
               return (
                 <div key={convo.id}>
                   <button
                     className="flex items-center gap-2 rounded-md px-2 py-2 transition-colors duration-300 hover:bg-light"
-                    onClick={() =>
-                      setSelectedConversation({
-                        convo: convo,
-                        senderId: data.authUserId,
-                      })
-                    }
+                    onClick={() => handleConvoSelect(convo, data.authUserId)}
                   >
                     <div className="h-[42px] w-[42px] shrink-0 rounded-full">
                       <img
@@ -147,13 +157,14 @@ export const FetchConversation = () => {
             })}
           </div>
         </div>
-        {selectedConversation ? (
-          <ChatComponent conversation={selectedConversation} />
-        ) : (
-          <div className="flex items-center justify-center w-full">
-            <p>Select a conversation to start chatting.</p>
-          </div>
-        )}
+        {!isMobile &&
+          (selectedConversation ? (
+            <ChatComponent conversation={selectedConversation} />
+          ) : (
+            <div className="flex items-center justify-center w-full">
+              <p>Select a conversation to start chatting.</p>
+            </div>
+          ))}
       </div>
     </div>
   );
