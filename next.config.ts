@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/chat/:path*",
-        destination: "http://localhost:3001/:path*",
+        // destination: "http://localhost:3001/:path*",
+        destination: `${process.env.NODE_BACKEND_URL}/:path*`,
       },
     ];
   },
