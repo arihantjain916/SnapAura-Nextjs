@@ -2,9 +2,9 @@
 
 import AxiosInstance from "@/lib/axiosInstance";
 import { RootState } from "@/redux/store";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { Stats } from "./component/stats";
@@ -34,7 +34,7 @@ export const DynamicProfile = () => {
       throw err;
     }
   }
-
+  const queryClient = useQueryClient();
   const { isPending, error, data } = useQuery({
     queryKey: ["fetchProfile"],
     queryFn: async () => await fetchProfile(),
@@ -55,11 +55,31 @@ export const DynamicProfile = () => {
     router.push("/profile");
   }
 
-  function handleFollow(type: string) {
+  async function handleFollow(type: string, id: string) {
     console.log(type);
     if (type === "follow") {
       if (!isAuthenticated) {
         alert("Please login to follow someone");
+      } else {
+        const res = await AxiosInstance.get(`/follow/request/send/${id}`, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("AUTH_TOKEN")}`,
+          },
+        });
+        if (res.data.status) {
+          alert(res.data.message);
+          queryClient.invalidateQueries({ queryKey: ["fetchProfile"] });
+        }
+      }
+    } else {
+      const res = await AxiosInstance.get(`/follow/request/unfollow/${id}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("AUTH_TOKEN")}`,
+        },
+      });
+      if (res.data.status) {
+        alert(res.data.message);
+        queryClient.invalidateQueries({ queryKey: ["fetchProfile"] });
       }
     }
   }
@@ -91,17 +111,17 @@ export const DynamicProfile = () => {
                 <>
                   <Button onClick={handleEdit}>Edit</Button>
                 </>
-              ) : data?.isFollowing ? (
+              ) : data?.followStatus === "pending" ? (
                 <Button
-                  onClick={() => handleFollow("unfollow")}
+                  onClick={() => handleFollow("unfollow", data?.id)}
                   className="bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block"
                 >
-                  Unfollow
+                  Sent
                 </Button>
               ) : (
                 <Button
-                  onClick={() => handleFollow("follow")}
-                  className="bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block"
+                  onClick={() => handleFollow("follow", data?.id)}
+                  className="px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block bg-blue-500"
                 >
                   Follow
                 </Button>
