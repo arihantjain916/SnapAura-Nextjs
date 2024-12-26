@@ -15,7 +15,9 @@ import Cookies from "js-cookie";
 
 export const DynamicProfile = () => {
   const router = useRouter();
-  const { username } = useSelector((state: RootState) => state.auth);
+  const { username, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth
+  );
   const params = useParams<{ username: string }>();
 
   async function fetchProfile() {
@@ -54,6 +56,15 @@ export const DynamicProfile = () => {
     router.push("/profile");
   }
 
+  function handleFollow(type: string) {
+    console.log(type);
+    if (type === "follow") {
+      if (!isAuthenticated) {
+        alert("Please login to follow someone");
+      }
+    }
+  }
+
   return (
     <main className="bg-white dark:bg-black">
       <div className="lg:w-8/12 lg:mx-auto mb-8">
@@ -82,11 +93,17 @@ export const DynamicProfile = () => {
                   <Button onClick={handleEdit}>Edit</Button>
                 </>
               ) : data?.isFollowing ? (
-                <Button className="bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block">
+                <Button
+                  onClick={() => handleFollow("unfollow")}
+                  className="bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block"
+                >
                   Unfollow
                 </Button>
               ) : (
-                <Button className="bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block">
+                <Button
+                  onClick={() => handleFollow("follow")}
+                  className="bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block"
+                >
                   Follow
                 </Button>
               )}
