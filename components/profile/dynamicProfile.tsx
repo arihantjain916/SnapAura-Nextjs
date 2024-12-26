@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { Stats } from "./component/stats";
 import { TabItem } from "./component/tabs";
 import { Posts } from "./component/posts";
+import Cookies from "js-cookie";
 
 export const DynamicProfile = () => {
   const router = useRouter();
@@ -19,7 +20,14 @@ export const DynamicProfile = () => {
 
   async function fetchProfile() {
     try {
-      const res = await AxiosInstance.get(`/search/profile/${params.username}`);
+      const res = await AxiosInstance.get(
+        `/search/profile/${params.username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("AUTH_TOKEN")}`,
+          },
+        }
+      );
       return res.data.data;
     } catch (err) {
       throw err;
@@ -73,13 +81,14 @@ export const DynamicProfile = () => {
                 <>
                   <Button onClick={handleEdit}>Edit</Button>
                 </>
+              ) : data?.isFollowing ? (
+                <Button className="bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block">
+                  Unfollow
+                </Button>
               ) : (
-                <Link
-                  href="#"
-                  className="bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block"
-                >
+                <Button className="bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block">
                   Follow
-                </Link>
+                </Button>
               )}
             </div>
 
