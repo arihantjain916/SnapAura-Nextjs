@@ -18,7 +18,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { MobileNavbar } from "../mobile-navbar";
 import { HeaderDock } from "../Dock";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
