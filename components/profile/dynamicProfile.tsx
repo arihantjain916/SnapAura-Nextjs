@@ -84,6 +84,65 @@ export const DynamicProfile = () => {
     }
   }
 
+  function getButton() {
+    if (data?.username == username) {
+      return <Button onClick={handleEdit}>Edit</Button>;
+    }
+
+    const className =
+      "bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block";
+
+    // if (data?.isFollowing) {
+    //   return (
+    //     <Button
+    //       className={className}
+    //       onClick={() => handleFollow("follow", data?.id)}
+    //     >
+    //       Follow
+    //     </Button>
+    //   );
+    // }
+
+    switch (data?.followStatus) {
+      case "pending":
+        return (
+          <Button
+            className={className}
+            onClick={() => handleFollow("unfollow", data?.id)}
+          >
+            Request Sent
+          </Button>
+        );
+      case "rejected":
+        return (
+          <Button
+            className={className}
+            onClick={() => handleFollow("follow", data?.id)}
+          >
+            Follow
+          </Button>
+        );
+      case "accepted":
+        return (
+          <Button
+            className={className}
+            onClick={() => handleFollow("ufollow", data?.id)}
+          >
+            Unfollow
+          </Button>
+        );
+      default:
+        return (
+          <Button
+            className={className}
+            onClick={() => handleFollow("follow", data?.id)}
+          >
+            Follow
+          </Button>
+        );
+    }
+  }
+
   return (
     <main className="bg-white dark:bg-black">
       <div className="lg:w-8/12 lg:mx-auto mb-8">
@@ -107,25 +166,7 @@ export const DynamicProfile = () => {
               >
                 <i className="fas fa-check text-white text-xs absolute inset-x-0 ml-1 mt-px"></i>
               </span>
-              {data?.username == username ? (
-                <>
-                  <Button onClick={handleEdit}>Edit</Button>
-                </>
-              ) : data?.followStatus === "pending" ? (
-                <Button
-                  onClick={() => handleFollow("unfollow", data?.id)}
-                  className="bg-blue-500 px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block"
-                >
-                  Sent
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => handleFollow("follow", data?.id)}
-                  className="px-2 py-1 text-white font-semibold text-sm rounded block text-center sm:inline-block bg-blue-500"
-                >
-                  Follow
-                </Button>
-              )}
+              {getButton()}
             </div>
 
             <Stats
