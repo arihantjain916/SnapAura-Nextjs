@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import SimpleImageSlider from "react-simple-image-slider";
 import { AxiosError } from "axios";
+import Link from "next/link";
 
 export const Feed = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -89,7 +90,9 @@ export const Feed = () => {
                     <img src={feed.user.profile} alt={feed.user.username} />
                   </div>
                   <span className="pt-1 ml-2 font-bold text-sm dark:text-white">
-                    {feed.user.username}
+                    <Link href={`/${feed.user.username}`}>
+                      {feed.user.username}
+                    </Link>
                   </span>
                 </div>
                 <span className="px-2 hover:bg-gray-300 cursor-pointer rounded">
