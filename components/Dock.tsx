@@ -12,12 +12,17 @@ import {
 } from "@/components/ui/tooltip";
 import { Dock, DockIcon } from "@/components/dock/Dock";
 import { ModeToggle } from "@/components/dock/mode-toggle";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export function HeaderDock() {
+  const { username } = useSelector((state: RootState) => state.auth);
+
+  const Data = DATA(username);
   return (
     <TooltipProvider>
       <Dock direction="middle">
-        {DATA.map((item) => (
+        {Data.map((item) => (
           <DockIcon key={item.name}>
             <Tooltip>
               <TooltipTrigger asChild>

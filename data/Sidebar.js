@@ -7,7 +7,8 @@ import {
   CirclePlus,
 } from "lucide-react";
 
-export const DATA = [
+
+export const DATA = (username) => [
   {
     name: "Home",
     url: "/",
@@ -35,7 +36,7 @@ export const DATA = [
   },
   {
     name: "Profile",
-    url: "/profile",
+    url: `/${username}`,
     icon: User,
   },
 ];
