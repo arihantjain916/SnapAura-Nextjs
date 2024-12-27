@@ -5,15 +5,50 @@ import { ScrollArea } from "@radix-ui/react-scroll-area";
 import EmojiPicker from "emoji-picker-react";
 import { ChevronLeft, Send, SendIcon } from "lucide-react";
 import { Input } from "../ui/input";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button } from "../ui/button";
+import { RenderMessage } from "./renderMessage";
+import Cookies from "js-cookie";
+import { io } from "socket.io-client";
+import axios from "axios";
 
 export const ChatComponent = ({
   conversation,
   setSelectedConversation,
 }: any) => {
+  const [messages, setMessages] = useState();
   const [emojiDisplay, setEmojiDisplay] = useState(false);
   const [inputValue, setInputValue] = useState("");
+
+  const socket = useRef(io("localhost:3001"));
+
+  socket.current.on("connect", () => {
+    socket.current.emit("add-user", Cookies.get("AUTH_TOKEN"));
+  });
+
+  async function fetchMessages() {
+    try {
+      const res = await axios.get(`/chat/messages/${conversation.convo.id}`);
+      if (res.data.success) {
+        setMessages(res.data.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on("msg-recieve", (msg) => {
+        console.log(msg);
+        setMessages(msg);
+      });
+    }
+  }, []);
 
   const handleEmojiClick = (emoji: string) => {
     setInputValue((prev) => prev + emoji);
@@ -24,9 +59,14 @@ export const ChatComponent = ({
   };
 
   const sendMessage = () => {
-    console.log(inputValue);
+    const data = {
+      senderId: conversation?.senderId,
+      receiverId: conversation.convo.otherParty.id,
+      message: inputValue,
+    };
+
+    socket.current.emit("send-msg", data);
     setInputValue("");
-    // Add logic for sending a message (e.g., an API call)
   };
 
   return (
@@ -66,12 +106,7 @@ export const ChatComponent = ({
       </div>
 
       {/* Chat messages section */}
-      {/* <div className="flex-1 overflow-y-auto px-3 py-5 space-y-4">
-        {conversation.messages.map((message: any) => {
-          const isSender = message.senderId === user.id;
-          return renderMessage(message, isSender);
-        })}
-      </div> */}
+      <RenderMessage messages={messages} senderId={conversation?.senderId} />
 
       {emojiDisplay && (
         <div className="absolute bottom-20 left-0 right-0 px-4">
@@ -82,24 +117,6 @@ export const ChatComponent = ({
       )}
 
       <div className="flex items-center gap-3 p-3 bg-slate-200 dark:bg-slate-900 rounded-lg shadow-md py-4 mt-auto sm:mb-[3.3rem] sm:py-4 sm:p-4 mb-[7.3rem]">
-        {/* <button
-          onClick={() => setEmojiDisplay((prev) => !prev)}
-          className="flex items-center justify-center w-10 h-10 text-lg bg-slate-200 dark:bg-slate-700 text-white rounded-full hover:bg-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 focus:outline-none focus:ring focus:ring-slate-500 focus:ring-opacity-50"
-        >
-          😂
-        </button>
-        <Input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder="Type a message..."
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              sendMessage();
-            }
-          }}
-          className="flex-1 px-4 py-2 bg-slate-800 dark:bg-slate-700 text-slate-100 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-500 border border-slate-700 dark:border-slate-600 rounded-lg focus:outline-none focus:ring focus:ring-slate-500 focus:ring-opacity-50 sm:px-3 sm:py-3 sm:text-base"
-        /> */}
         <div className="relative flex items-center w-full">
           <button
             onClick={() => setEmojiDisplay((prev) => !prev)}
@@ -120,9 +137,7 @@ export const ChatComponent = ({
             className="w-full rounded-md border-none bg-slate-100 dark:bg-slate-800 py-2 pl-9 pr-3 text-slate-700 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
           />
         </div>
-        <button
-          onClick={sendMessage}
-        >
+        <button onClick={sendMessage}>
           <SendIcon />
         </button>
       </div>
