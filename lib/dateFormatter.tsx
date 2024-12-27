@@ -6,10 +6,7 @@ export const DateFormatter = (date: string) => {
 };
 
 export const ReturnDate = (date: string) => {
-  // const formattedDate = format(new Date(date), "yyyy-MM-dd");
   const formattedDate = format(new Date(date), 'dd-MMMM-yy')
-  console.log(formattedDate);
-  
 
   return formattedDate
 };
