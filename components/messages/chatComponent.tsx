@@ -20,6 +20,14 @@ export const ChatComponent = ({
   const [inputValue, setInputValue] = useState("");
 
   const socket = useRef(io("http://localhost:3001"));
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      console.log(scrollRef.current.scrollHeight)
+    }
+  };
 
   async function fetchMessages() {
     try {
@@ -48,6 +56,10 @@ export const ChatComponent = ({
     fetchMessages();
   }, [conversation]);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages,inputValue]);
+
   const handleEmojiClick = (emoji: string) => {
     setInputValue((prev) => prev + emoji);
   };
@@ -64,7 +76,10 @@ export const ChatComponent = ({
     };
 
     socket.current.emit("send-msg", data);
-    setMessages((prev)=>[...prev,{...data, createdAt: new Date(Date.now()), id: Date.now().toString()}])
+    setMessages((prev) => [
+      ...prev,
+      { ...data, createdAt: new Date(Date.now()), id: Date.now().toString() },
+    ]);
     setInputValue("");
   };
 
@@ -97,7 +112,7 @@ export const ChatComponent = ({
       </div>
 
       {/* Chat Render */}
-      <RenderMessage messages={messages} senderId={conversation?.senderId} />
+      <RenderMessage messages={messages} senderId={conversation?.senderId} ref={scrollRef} />
 
       {/* Emoji Picker */}
       {emojiDisplay && (
