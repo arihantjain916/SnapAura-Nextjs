@@ -1,7 +1,6 @@
 "use client";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import EmojiPicker from "emoji-picker-react";
 import { ChevronLeft, Send, SendIcon } from "lucide-react";
 import { Input } from "../ui/input";
@@ -98,9 +97,26 @@ export const ChatComponent = ({
       {/* Chat Render */}
       <RenderMessage messages={messages} senderId={conversation?.senderId} />
 
+      {/* Emoji Picker */}
+      {emojiDisplay && (
+        <div className="absolute bottom-20 left-0 right-0 px-4">
+          <EmojiPicker
+            onEmojiClick={(emoji) => handleEmojiClick(emoji.emoji)}
+          />
+        </div>
+      )}
       {/* Input section */}
-      <div className="bg-white dark:bg-gray-800 p-4 border-t border-gray-200 dark:border-gray-700">
+
+      <div className="bg-white dark:bg-gray-800 p-4 border-t border-gray-200 dark:border-gray-700 mb-8">
         <div className="flex items-center">
+          {/* <div className="relative flex items-center w-full"> */}
+          {/* <Button
+          variant={"ghost"}
+            onClick={() => setEmojiDisplay((prev) => !prev)}
+            className="h-5 w-5 text-slate-400 dark:text-slate-500"
+          >
+            😂
+          </Button> */}
           <Input
             type="text"
             placeholder="Type a message..."
@@ -113,6 +129,8 @@ export const ChatComponent = ({
               }
             }}
           />
+          {/* </div> */}
+
           <Button onClick={sendMessage}>
             <Send className="h-4 w-4" />
           </Button>
