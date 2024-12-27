@@ -5,19 +5,15 @@ import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { ChatComponent } from "./chatComponent";
 import { useState } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { useRouter } from "next/navigation";
 interface ConversationState {
   convo: any;
   senderId: string;
 }
 
 export const FetchConversation = () => {
-  const router = useRouter();
-  const isMobile = useIsMobile();
-
   const [selectedConversation, setSelectedConversation] =
     useState<ConversationState | null>(null);
+
   async function fetchConversation() {
     try {
       const res = await axios.get("/chat/conversation", {
@@ -43,9 +39,9 @@ export const FetchConversation = () => {
     if (error instanceof AxiosError) {
       message = error?.response?.data;
     }
-   if(!message.status && message.data.length === 0){
-     return <p>Please start the conversation.</p>;
-   }
+    if (!message.status && message.data.length === 0) {
+      return <p>Please start the conversation.</p>;
+    }
   }
 
   if (isPending) {
