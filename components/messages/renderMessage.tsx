@@ -1,5 +1,5 @@
 import { DateFormatter, ReturnDate } from "@/lib/dateFormatter";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { ScrollArea } from "../ui/scroll-area";
 
 export const RenderMessage = ({ messages, senderId }: any) => {
   return (
