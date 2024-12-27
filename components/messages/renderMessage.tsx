@@ -1,3 +1,4 @@
+import { DateFormatter } from "@/lib/dateFormatter";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 export const RenderMessage = ({ messages, senderId }: any) => {
@@ -17,7 +18,7 @@ export const RenderMessage = ({ messages, senderId }: any) => {
           >
             <p>{message.message}</p>
             <span className="text-xs mt-1 block opacity-70">
-              {message.createdAt ?? "ss"}
+              {DateFormatter(message.createdAt)}
             </span>
           </div>
         </div>
