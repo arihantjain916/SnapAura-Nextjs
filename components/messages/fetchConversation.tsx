@@ -53,7 +53,6 @@ export const FetchConversation = () => {
   }
 
   function handleConvoSelect(convo: any, id: string) {
-    console.log(selectedConversation);
     setSelectedConversation({
       convo: convo,
       senderId: id,
