@@ -41,10 +41,11 @@ export const FetchConversation = () => {
   if (error) {
     let message;
     if (error instanceof AxiosError) {
-      message = error?.response?.data.message;
+      message = error?.response?.data;
     }
-    console.log(message);
-    return <p>Something went wrong</p>;
+   if(!message.status && message.data.length === 0){
+     return <p>Please start the conversation.</p>;
+   }
   }
 
   if (isPending) {
@@ -52,10 +53,6 @@ export const FetchConversation = () => {
   }
 
   function handleConvoSelect(convo: any, id: string) {
-    // if (isMobile) {
-    //   console.log(convo.id);
-    // } else {
-    // }
     console.log(selectedConversation);
     setSelectedConversation({
       convo: convo,
