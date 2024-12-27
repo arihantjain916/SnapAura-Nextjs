@@ -18,7 +18,7 @@ export const ChatComponent = ({
   const [emojiDisplay, setEmojiDisplay] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  const socket = useRef(io("localhost:3001"));
+  const socket = useRef(io("https://snapaura-chat.vercel.app"));
 
   async function fetchMessages() {
     try {
