@@ -9,16 +9,17 @@ import { Button } from "../ui/button";
 import { RenderMessage } from "./renderMessage";
 import { io } from "socket.io-client";
 import axios from "axios";
+import { MessageType } from "@/types/MessageType";
 
 export const ChatComponent = ({
   conversation,
   setSelectedConversation,
 }: any) => {
-  const [messages, setMessages] = useState();
+  const [messages, setMessages] = useState<MessageType[]>([]);
   const [emojiDisplay, setEmojiDisplay] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  const socket = useRef(io("https://snapaura-chat.vercel.app"));
+  const socket = useRef(io("http://localhost:3001"));
 
   async function fetchMessages() {
     try {
@@ -63,6 +64,7 @@ export const ChatComponent = ({
     };
 
     socket.current.emit("send-msg", data);
+    setMessages((prev)=>[...prev,{...data, createdAt: new Date(Date.now()), id: Date.now().toString()}])
     setInputValue("");
   };
 
