@@ -5,7 +5,6 @@ import { ReturnDate, DateFormatter } from "@/lib/dateFormatter";
 
 export const RenderMessage = forwardRef<HTMLDivElement, any>(
   ({ messages, senderId }, ref) => {
-    console.log(ref)
     return (
       <ScrollArea ref={ref} className="flex-1 p-4">
         {messages?.map((message: any) => (
@@ -24,8 +23,8 @@ export const RenderMessage = forwardRef<HTMLDivElement, any>(
             >
               <p>{message.message}</p>
               <span className="text-xs mt-1 block opacity-70">
-                {ReturnDate(message.createdAt)}{" "}
-                {DateFormatter(message.createdAt)}
+                {ReturnDate(message.createdAt ?? message.created_at)}{" "}
+                {DateFormatter(message.createdAt ?? message.created_at)}
               </span>
             </div>
           </div>

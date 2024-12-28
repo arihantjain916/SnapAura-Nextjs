@@ -10,7 +10,7 @@ import { RenderMessage } from "./renderMessage";
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import { MessageType } from "@/types/MessageType";
-import DefaultEventsMap from "socket.io-client";
+import Cookies from "js-cookie";
 // import { Socket } from "dgram";
 
 export const ChatComponent = ({
@@ -28,7 +28,6 @@ export const ChatComponent = ({
   const scrollToBottom = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      console.log(scrollRef.current.scrollHeight);
     }
   };
 
@@ -49,24 +48,9 @@ export const ChatComponent = ({
       transports: ["websocket", "polling"],
     });
 
-    if (socket.current) {
-      socket.current.on("connect", () => {
-        console.log("Connected to socket server");
-      });
-
-      socket.current.on("disconnect", () => {
-        console.log("Disconnected from socket server");
-      });
-
-      socket.current.on("msg-recieve", fetchMessages);
-    }
-
-    return () => {
-      if (socket.current) {
-        socket.current.off("msg-recieve");
-      }
-      socket.current?.disconnect();
-    };
+    socket.current.on("connect", () => {
+      socket?.current?.emit("add-user", Cookies.get("AUTH_TOKEN"));
+    });
   }, []);
 
   useEffect(() => {
@@ -100,6 +84,11 @@ export const ChatComponent = ({
     setInputValue("");
   };
 
+  if (socket.current) {
+    socket.current?.on("msg-recieve", async (message) => {
+      await fetchMessages();
+    });
+  }
   return (
     <>
       <div className="bg-white dark:bg-gray-800 p-4 flex items-center border-b border-gray-200 dark:border-gray-700">
