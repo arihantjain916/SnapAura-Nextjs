@@ -19,7 +19,7 @@ export const ChatComponent = ({
   const [emojiDisplay, setEmojiDisplay] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  const socket = useRef(io("http://localhost:3001"));
+  const socket = useRef(io(process.env.NEXT_PUBLIC_SOCKET_URL as string));
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
