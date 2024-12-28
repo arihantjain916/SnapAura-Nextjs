@@ -7,10 +7,10 @@ import { Input } from "../ui/input";
 import { useRef, useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { RenderMessage } from "./renderMessage";
-import { io,Socket } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import { MessageType } from "@/types/MessageType";
-import DefaultEventsMap  from 'socket.io-client';
+import DefaultEventsMap from "socket.io-client";
 // import { Socket } from "dgram";
 
 export const ChatComponent = ({
@@ -28,7 +28,7 @@ export const ChatComponent = ({
   const scrollToBottom = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      console.log(scrollRef.current.scrollHeight)
+      console.log(scrollRef.current.scrollHeight);
     }
   };
 
@@ -44,9 +44,20 @@ export const ChatComponent = ({
   }
 
   useEffect(() => {
-    socket.current = io(process.env.NEXT_PUBLIC_SOCKET_URL as string)
+    socket.current = io(process.env.NEXT_PUBLIC_SOCKET_URL as string, {
+      withCredentials: true,
+      transports: ["websocket", "polling"],
+    });
 
     if (socket.current) {
+      socket.current.on("connect", () => {
+        console.log("Connected to socket server");
+      });
+
+      socket.current.on("disconnect", () => {
+        console.log("Disconnected from socket server");
+      });
+
       socket.current.on("msg-recieve", fetchMessages);
     }
 
@@ -54,6 +65,7 @@ export const ChatComponent = ({
       if (socket.current) {
         socket.current.off("msg-recieve");
       }
+      socket.current?.disconnect();
     };
   }, []);
 
@@ -63,7 +75,7 @@ export const ChatComponent = ({
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages,inputValue]);
+  }, [messages, inputValue]);
 
   const handleEmojiClick = (emoji: string) => {
     setInputValue((prev) => prev + emoji);
@@ -117,7 +129,11 @@ export const ChatComponent = ({
       </div>
 
       {/* Chat Render */}
-      <RenderMessage messages={messages} senderId={conversation?.senderId} ref={scrollRef} />
+      <RenderMessage
+        messages={messages}
+        senderId={conversation?.senderId}
+        ref={scrollRef}
+      />
 
       {/* Emoji Picker */}
       {emojiDisplay && (
