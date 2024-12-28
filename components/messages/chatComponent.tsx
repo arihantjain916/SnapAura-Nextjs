@@ -7,9 +7,11 @@ import { Input } from "../ui/input";
 import { useRef, useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { RenderMessage } from "./renderMessage";
-import { io } from "socket.io-client";
+import { io,Socket } from "socket.io-client";
 import axios from "axios";
 import { MessageType } from "@/types/MessageType";
+import DefaultEventsMap  from 'socket.io-client';
+// import { Socket } from "dgram";
 
 export const ChatComponent = ({
   conversation,
@@ -19,7 +21,8 @@ export const ChatComponent = ({
   const [emojiDisplay, setEmojiDisplay] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  const socket = useRef(io(process.env.NEXT_PUBLIC_SOCKET_URL as string));
+  const socket = useRef<Socket>(null);
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -41,6 +44,8 @@ export const ChatComponent = ({
   }
 
   useEffect(() => {
+    socket.current = io(process.env.NEXT_PUBLIC_SOCKET_URL as string)
+
     if (socket.current) {
       socket.current.on("msg-recieve", fetchMessages);
     }
@@ -75,7 +80,7 @@ export const ChatComponent = ({
       message: inputValue,
     };
 
-    socket.current.emit("send-msg", data);
+    socket.current!.emit("send-msg", data);
     setMessages((prev) => [
       ...prev,
       { ...data, createdAt: new Date(Date.now()), id: Date.now().toString() },
