@@ -47,7 +47,6 @@ export const Notifications = () => {
       forceTLS: false,
       // wsPort:80
     });
-    Pusher.logToConsole = true;
 
     const channel = pusher.subscribe(`notification.${username}`);
     channel.bind("notification.follow", (data: any) => {
