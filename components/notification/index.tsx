@@ -49,7 +49,7 @@ export const Notifications = () => {
     });
 
     const channel = pusher.subscribe(`notification.${id}`);
-    channel.bind("notification.follow", (data: any) => {
+    channel.bind("notification", (data: any) => {
       console.log(data);
       setNotification((prev: any) => [...prev, data.data]);
     });
