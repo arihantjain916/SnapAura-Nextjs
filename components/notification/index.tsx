@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
 export const Notifications = () => {
-  const { username } = useSelector((state: RootState) => state.auth);
+  const { id } = useSelector((state: RootState) => state.auth);
 
   const [notification, setNotification] = useState<NotificationTypes[]>([]);
   async function fetchNotification() {
@@ -48,7 +48,7 @@ export const Notifications = () => {
       // wsPort:80
     });
 
-    const channel = pusher.subscribe(`notification.${username}`);
+    const channel = pusher.subscribe(`notification.${id}`);
     channel.bind("notification.follow", (data: any) => {
       console.log(data);
       setNotification((prev: any) => [...prev, data.data]);
