@@ -59,6 +59,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       if (res.data.success) {
         dispatch(
           userdata({
+            id: res.data.data.id,
             isAuthenticated: true,
             username: res.data.data.username,
             email: res.data.data.email,
