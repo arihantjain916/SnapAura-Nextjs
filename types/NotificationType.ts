@@ -1,7 +1,7 @@
 import { PostType } from "./PostType";
 import { UserType } from "./UserType";
 
-export interface FollowRequestResponse {
+export interface FollowRequestResponseType {
   data: NotificationTypes;
   user: UserType;
   post: null | PostType;
