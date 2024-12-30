@@ -7,11 +7,14 @@ import AxiosInstance from "@/lib/axiosInstance";
 import { NotificationTypes } from "@/types/NotificationType";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { NotificationRender } from "./render";
 
 export const Notifications = () => {
   const { id } = useSelector((state: RootState) => state.auth);
 
-  const [notification, setNotification] = useState<NotificationTypes[]>([]);
+  const [notification, setNotification] = useState<NotificationTypes[] | []>(
+    []
+  );
   async function fetchNotification() {
     try {
       const res = await AxiosInstance.get("/notification/fetch", {
@@ -25,18 +28,6 @@ export const Notifications = () => {
     }
   }
 
-  //   const { isPending, error, data } = useQuery({
-  //     queryKey: ["notificationData"],
-  //     queryFn: async () => await fetchNotification(),
-  //     refetchInterval: 500000,
-  //   });
-
-  //   if (isPending) return <h1>Loading...</h1>;
-  //   if (error) {
-  //     console.log(error);
-  //     return <h1>Something went wrong</h1>;
-  //   }
-
   useEffect(() => {
     fetchNotification();
   }, []);
@@ -45,7 +36,6 @@ export const Notifications = () => {
     const pusher = new Pusher("fac20a8dfab0cadc489c", {
       cluster: "ap2",
       forceTLS: false,
-      // wsPort:80
     });
 
     const channel = pusher.subscribe(`notification.${id}`);
@@ -65,12 +55,7 @@ export const Notifications = () => {
     <>
       <h1>Notification</h1>
 
-      {notification?.map((data: any) => (
-        <div key={data.id}>
-          <p>{data.id}</p>
-          <h1>{data.message}</h1>
-        </div>
-      ))}
+      <NotificationRender notification={notification} />
     </>
   );
 };
