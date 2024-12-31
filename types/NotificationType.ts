@@ -1,22 +1,25 @@
 import { PostType } from "./PostType";
 import { UserType } from "./UserType";
 
-export interface FollowRequestResponseType {
-  data: NotificationTypes;
-  user: UserType;
-  post: null | PostType[];
-}
 
 export interface NotificationTypes {
   id: string;
-  user_id: string;
   message: string;
-  type: string;
-  link: string;
+  link?: string;
   is_read: number;
-  read_at: null | string;
   action_type: string;
-  created_at: string;
+  read_at: null | string;
+  type: string;
+  user_id: string;
+  user: UserType;
+  meta: Meta;
   updated_at: string;
+  created_at: string;
+}
+
+interface Meta {
+  post_id: null | string;
+  post: PostType | null;
+  user_id: string;
   user: UserType;
 }
