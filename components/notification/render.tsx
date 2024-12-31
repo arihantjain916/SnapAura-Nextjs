@@ -29,7 +29,7 @@ export const NotificationRender = ({
         return "border-success";
     }
   };
-  console.log(notification);
+  
   return (
     <div className="space-y-2 mt-2 p-2">
       {notification.map((data) => (
@@ -40,7 +40,7 @@ export const NotificationRender = ({
           <div className="flex items-center gap-2">
           {getIcon(data.type)}
             <Avatar>
-              {/* <AvatarImage src={} /> */}
+              <AvatarImage src={data.meta.user.profile} />
               <AvatarFallback></AvatarFallback>
             </Avatar>
             <h1>{data.message}</h1>
