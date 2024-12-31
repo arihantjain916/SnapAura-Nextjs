@@ -23,6 +23,7 @@ export const OAuthCallback = () => {
         Cookies.set("AUTH_TOKEN", res.data.token, { expires: 7 });
         dispatch(
           userdata({
+            id:res.data.data.id,
             isAuthenticated: true,
             username: res.data.data.username,
             email: res.data.data.email,
