@@ -5,7 +5,6 @@ import { UserType } from "./UserType";
 export interface NotificationTypes {
   id: string;
   message: string;
-  link?: string;
   is_read: number;
   action_type: string;
   read_at: null | string;
@@ -22,4 +21,6 @@ interface Meta {
   post: PostType | null;
   user_id: string;
   user: UserType;
+  button_text:string;
+  link?: string;
 }
