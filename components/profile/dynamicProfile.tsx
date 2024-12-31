@@ -11,6 +11,7 @@ import { Stats } from "./component/stats";
 import { TabItem } from "./component/tabs";
 import { Posts } from "./component/posts";
 import Cookies from "js-cookie";
+import { useState } from "react";
 
 export const DynamicProfile = () => {
   const router = useRouter();
@@ -18,6 +19,8 @@ export const DynamicProfile = () => {
     (state: RootState) => state.auth
   );
   const params = useParams<{ username: string }>();
+
+  const [notificationId, setNotificationId] = useState<string>("");
 
   async function fetchProfile() {
     try {
@@ -38,7 +41,7 @@ export const DynamicProfile = () => {
   const { isPending, error, data } = useQuery({
     queryKey: ["fetchProfile"],
     queryFn: async () => await fetchProfile(),
-    refetchInterval: 500000,
+    refetchOnWindowFocus: false,
   });
 
   const user = {
@@ -56,7 +59,6 @@ export const DynamicProfile = () => {
   }
 
   async function handleFollow(type: string, id: string) {
-    console.log(type);
     if (type === "follow") {
       if (!isAuthenticated) {
         alert("Please login to follow someone");
@@ -68,11 +70,13 @@ export const DynamicProfile = () => {
         });
         if (res.data.status) {
           alert(res.data.message);
+          console.log(res.data)
+          setNotificationId(res.data.id)
           queryClient.invalidateQueries({ queryKey: ["fetchProfile"] });
         }
       }
     } else {
-      const res = await AxiosInstance.get(`/follow/request/unfollow/${id}`, {
+      const res = await AxiosInstance.get(`/follow/request/unfollow/${notificationId}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("AUTH_TOKEN")}`,
         },
