@@ -24,24 +24,14 @@ import { userdata } from "@/redux/features/auth";
 import { ChangeEvent, useState } from "react";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "@/lib/image-formatter";
+import { UpdateInfo } from "./update-info";
 
 interface UserProfileType extends React.HTMLAttributes<HTMLDivElement> {}
 
 const userProfileSchema = z.object({
-  email: z
-    .string()
-    .email("Invalid email.")
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-  name: z
-    .string()
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-  username: z
-    .string()
-    .min(3, "Username must be at least 3 characters.")
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
+  email: z.string().email("Invalid email."),
+  name: z.string().min(3, "Name must be at least 3 characters."),
+  username: z.string().min(3, "Username must be at least 3 characters."),
 });
 
 type UserProfileSchemaType = z.infer<typeof userProfileSchema>;
@@ -174,25 +164,32 @@ export function FormContent({ className, ...props }: UserProfileType) {
                 </div>
               )}
 
-              {/* Email Field */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email*</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="example@mail.com"
-                        {...field}
-                        disabled
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+              <div>
+                {/* Email Field */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email*</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="example@mail.com"
+                          {...field}
+                          // disabled
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {form.watch("email") !== email && (
+                  <div className="flex justify-end mt-2">
+                    <UpdateInfo field="Email" email={form.watch("email")} />
+                  </div>
                 )}
-              />
+              </div>
 
               {/* Name Field */}
               <FormField
@@ -209,25 +206,32 @@ export function FormContent({ className, ...props }: UserProfileType) {
                 )}
               />
 
-              {/* Username Field */}
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username*</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="Username"
-                        {...field}
-                        disabled
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+              <div>
+                {/* Username Field */}
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username*</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Username"
+                          {...field}
+                          disabled
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {form.watch("email") !== email && (
+                  <div className="flex justify-end mt-2">
+                    <UpdateInfo field="Username" email={email} />
+                  </div>
                 )}
-              />
+              </div>
 
               {/* Submit Buttons */}
               <CardFooter className="flex justify-between mt-3">
