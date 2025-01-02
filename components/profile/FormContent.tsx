@@ -226,7 +226,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
                     </FormItem>
                   )}
                 />
-                {form.watch("email") !== email && (
+                {form.watch("username") !== username && (
                   <div className="flex justify-end mt-2">
                     <UpdateInfo field="Username" email={email} />
                   </div>
