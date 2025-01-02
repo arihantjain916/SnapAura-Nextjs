@@ -27,6 +27,7 @@ import { useDispatch } from "react-redux";
 import { userdata } from "@/redux/features/auth";
 import { GoogleBtn } from "../OAuth/GoogleBtn";
 import { GitHubBtn } from "../OAuth/GithubBtn";
+import { ForgotPassword } from "../forgot-pass";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -93,7 +94,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
     form.reset();
   }
-  
+
   return (
     <>
       <ToastContainer />
@@ -127,7 +128,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password*</FormLabel>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Password*</FormLabel>
+                      <ForgotPassword />
+                    </div>
                     <FormControl>
                       <Input
                         type="password"
