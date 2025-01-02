@@ -63,12 +63,12 @@ export const ForgotPassword = () => {
     <>
       <ToastContainer />
       <Dialog>
-        <DialogTrigger>Forgot Password</DialogTrigger>
+        <DialogTrigger>Forgot Password?</DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <div className="w-full rounded-lg p-6 shadow sm:max-w-md sm:p-8 md:mt-0">
               <DialogTitle className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Forgot Password
+                Forgot Password?
               </DialogTitle>
 
               <p className="font-light text-gray-500 dark:text-gray-400">
