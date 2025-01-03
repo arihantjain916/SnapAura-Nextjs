@@ -85,8 +85,8 @@ export function FormContent({ className, ...props }: UserProfileType) {
     try {
       const formData = new FormData();
       if (image) formData.append("profile", image);
-      formData.append("username", data.username || "");
-      formData.append("email", data.email || "");
+      // formData.append("username", data.username || "");
+      // formData.append("email", data.email || "");
       formData.append("name", data.name || "");
 
       const res = await AxiosInstance.post(
@@ -186,7 +186,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
                 />
                 {form.watch("email") !== email && (
                   <div className="flex justify-end mt-2">
-                    <UpdateInfo field="Email" email={form.watch("email")} />
+                    <UpdateInfo field="email" email={form.watch("email")} />
                   </div>
                 )}
               </div>
@@ -219,7 +219,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
                           type="text"
                           placeholder="Username"
                           {...field}
-                          disabled
+                          // disabled
                         />
                       </FormControl>
                       <FormMessage />
@@ -228,14 +228,20 @@ export function FormContent({ className, ...props }: UserProfileType) {
                 />
                 {form.watch("username") !== username && (
                   <div className="flex justify-end mt-2">
-                    <UpdateInfo field="Username" email={email} />
+                    <UpdateInfo field="username" email={email} />
                   </div>
                 )}
               </div>
 
               {/* Submit Buttons */}
               <CardFooter className="flex justify-between mt-3">
-                <Button variant="outline" type="button">
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => {
+                    form.reset({ email, username, name });
+                  }}
+                >
                   Cancel
                 </Button>
                 <Button type="submit">Update</Button>
