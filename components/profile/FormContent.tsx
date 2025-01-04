@@ -24,24 +24,14 @@ import { userdata } from "@/redux/features/auth";
 import { ChangeEvent, useState } from "react";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "@/lib/image-formatter";
+import { UpdateInfo } from "./update-info";
 
 interface UserProfileType extends React.HTMLAttributes<HTMLDivElement> {}
 
 const userProfileSchema = z.object({
-  email: z
-    .string()
-    .email("Invalid email.")
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-  name: z
-    .string()
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-  username: z
-    .string()
-    .min(3, "Username must be at least 3 characters.")
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
+  email: z.string().email("Invalid email."),
+  name: z.string().min(3, "Name must be at least 3 characters."),
+  username: z.string().min(3, "Username must be at least 3 characters."),
 });
 
 type UserProfileSchemaType = z.infer<typeof userProfileSchema>;
@@ -57,6 +47,11 @@ export function FormContent({ className, ...props }: UserProfileType) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [updateType, setUpdateType] = useState<"email" | "username" | null>(
+    null
+  );
 
   const form = useForm<UserProfileSchemaType>({
     resolver: zodResolver(userProfileSchema),
@@ -93,24 +88,38 @@ export function FormContent({ className, ...props }: UserProfileType) {
 
   const onSubmit = async (data: UserProfileSchemaType) => {
     try {
+      const authToken = Cookies.get("AUTH_TOKEN");
+      const headers = { Authorization: `Bearer ${authToken}` };
+
+      if (data.email !== email || data.username !== username) {
+        const updateField = data.email !== email ? "email" : "username";
+        const otpmail = updateField === "email" ? data.email : email;
+
+        setUpdateType(updateField);
+        setIsModalOpen(true);
+
+        await AxiosInstance.get(`/user/send/otp/${otpmail}`, {
+          headers,
+        });
+
+        return;
+      }
+
       const formData = new FormData();
       if (image) formData.append("profile", image);
-      formData.append("username", data.username || "");
-      formData.append("email", data.email || "");
       formData.append("name", data.name || "");
 
-      const res = await AxiosInstance.post(
+      const response = await AxiosInstance.post(
         "/user/update/profile?_method=PUT",
         formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("AUTH_TOKEN")}`,
-          },
-        }
+        { headers }
       );
 
-      if (res.data.status) {
-        const { username, email, profile, name } = res.data.data;
+      const { status, message, data: userData } = response.data;
+
+      if (status) {
+        const { username, email, profile, name } = userData;
+
         dispatch(
           userdata({
             isAuthenticated: true,
@@ -120,16 +129,69 @@ export function FormContent({ className, ...props }: UserProfileType) {
             name,
           })
         );
+
         form.reset({ email, username, name });
         setImage(null);
         setImageUrl(null);
-        toast.success(res.data.message, { position: "bottom-right" });
+        toast.success(message, { position: "bottom-right" });
       } else {
-        toast.warn(res.data.message, { position: "bottom-right" });
+        toast.warn(message, { position: "bottom-right" });
       }
     } catch (error: any) {
-      const message = error.response?.data?.message || "An error occurred.";
-      toast.error(message, { position: "bottom-right" });
+      const errorMessage =
+        error.response?.data?.message || "An error occurred.";
+      toast.error(errorMessage, { position: "bottom-right" });
+    }
+  };
+
+  const handleOTPVerification = async () => {
+    try {
+      const authToken = Cookies.get("AUTH_TOKEN");
+      if (!authToken) throw new Error("Authorization token is missing.");
+
+      const headers = { Authorization: `Bearer ${authToken}` };
+      const updateField =
+        form.getValues("email") !== email ? "email" : "username";
+      const updatedValue = form.getValues(updateField);
+
+      setIsModalOpen(false);
+
+      const response = await AxiosInstance.post(
+        `/user/verify/otp`,
+        {
+          field: updateField,
+          [updateField]: updatedValue,
+          otp,
+        },
+        { headers }
+      );
+      const { status, message, data: userData } = response.data;
+
+      if (status === "success") {
+        const { username, email, profile, name } = userData;
+
+        dispatch(
+          userdata({
+            isAuthenticated: true,
+            username,
+            email,
+            profile,
+            name,
+          })
+        );
+      }
+
+      setOtp("");
+      setUpdateType(null);
+      toast.success(message, { position: "bottom-right" });
+    } catch (error: any) {
+      const { status, message } = error.response?.data;
+      console.log(message ?? "ss");
+      if (status === "error") {
+        toast.error(message.username[0] ?? message.email[0], {
+          position: "bottom-right",
+        });
+      }
     }
   };
 
@@ -174,25 +236,32 @@ export function FormContent({ className, ...props }: UserProfileType) {
                 </div>
               )}
 
-              {/* Email Field */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email*</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="example@mail.com"
-                        {...field}
-                        disabled
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+              <div>
+                {/* Email Field */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email*</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="example@mail.com"
+                          {...field}
+                          // disabled
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {form.watch("email") !== email && (
+                  <div className="flex justify-end mt-2">
+                    {/* <UpdateInfo field="email" email={form.watch("email")} /> */}
+                  </div>
                 )}
-              />
+              </div>
 
               {/* Name Field */}
               <FormField
@@ -209,29 +278,42 @@ export function FormContent({ className, ...props }: UserProfileType) {
                 )}
               />
 
-              {/* Username Field */}
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username*</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="Username"
-                        {...field}
-                        disabled
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+              <div>
+                {/* Username Field */}
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username*</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Username"
+                          {...field}
+                          // disabled
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {form.watch("username") !== username && (
+                  <div className="flex justify-end mt-2">
+                    {/* <UpdateInfo field="username" email={email} /> */}
+                  </div>
                 )}
-              />
+              </div>
 
               {/* Submit Buttons */}
               <CardFooter className="flex justify-between mt-3">
-                <Button variant="outline" type="button">
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => {
+                    form.reset({ email, username, name });
+                  }}
+                >
                   Cancel
                 </Button>
                 <Button type="submit">Update</Button>
@@ -239,6 +321,15 @@ export function FormContent({ className, ...props }: UserProfileType) {
             </div>
           </form>
         </Form>
+
+        <UpdateInfo
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          otp={otp}
+          setOtp={setOtp}
+          onVerify={handleOTPVerification}
+          updateType={updateType}
+        />
       </div>
     </>
   );
