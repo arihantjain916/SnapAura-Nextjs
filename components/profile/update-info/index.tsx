@@ -21,8 +21,8 @@ interface OTPVerificationModalProps {
   otp: string;
   setOtp: (otp: string) => void;
   onVerify: () => void;
-  field: string;
-  email: string;
+  updateType: "email" | "username" | null;
+  // setIsOpen: (isOpen: boolean) => void;
 }
 
 export const UpdateInfo = ({
@@ -31,20 +31,20 @@ export const UpdateInfo = ({
   otp,
   setOtp,
   onVerify,
-  field,
-  email,
+  updateType,
+  // setIsOpen,
 }: OTPVerificationModalProps) => {
+
   return (
     <>
       <ToastContainer />
-      <Dialog>
-        <DialogTrigger>Verify Email</DialogTrigger>
+      <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Verify Email</DialogTitle>
             <DialogDescription>
-              We have send you an one time password on your email {email} to
-              change {field}.
+              We have send you an one time password on your email to update{" "}
+              {updateType === "email" ? "Email" : "Username"}.
             </DialogDescription>
             <div className="mt-4">
               <InputOTP maxLength={4} value={otp} onChange={setOtp}>
