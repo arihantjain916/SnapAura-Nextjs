@@ -91,22 +91,16 @@ export function FormContent({ className, ...props }: UserProfileType) {
       const authToken = Cookies.get("AUTH_TOKEN");
       const headers = { Authorization: `Bearer ${authToken}` };
 
-      // Check for email or username changes
       if (data.email !== email || data.username !== username) {
         const updateField = data.email !== email ? "email" : "username";
-        const updateValue = form.getValues(updateField);
+        const otpmail = updateField === "email" ? data.email : email;
 
         setUpdateType(updateField);
         setIsModalOpen(true);
 
-        await AxiosInstance.post(
-          "/user/send/otp?_method=PUT",
-          {
-            [updateField]: updateValue,
-            field: updateField,
-          },
-          { headers }
-        );
+        await AxiosInstance.get(`/user/send/otp/${otpmail}`, {
+          headers,
+        });
 
         return;
       }
