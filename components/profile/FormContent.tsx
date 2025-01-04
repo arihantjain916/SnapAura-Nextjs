@@ -146,30 +146,49 @@ export function FormContent({ className, ...props }: UserProfileType) {
 
   const handleOTPVerification = async () => {
     try {
+      const authToken = Cookies.get("AUTH_TOKEN");
+      if (!authToken) throw new Error("Authorization token is missing.");
+
+      const headers = { Authorization: `Bearer ${authToken}` };
+      const updateField =
+        form.getValues("email") !== email ? "email" : "username";
+      const updatedValue = form.getValues(updateField);
+
       setIsModalOpen(false);
-      if (updateType === "email") {
-        const res = await AxiosInstance.post(
-          "/user/send/otp?_method=PUT",
-          {
-            email: form.getValues("email"),
-            otp: otp,
-            field: "email",
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("AUTH_TOKEN")}`,
-            },
-          }
+
+      const response = await AxiosInstance.post(
+        `/user/verify/otp`,
+        {
+          field: updateField,
+          [updateField]: updatedValue,
+          otp,
+        },
+        { headers }
+      );
+      const { status, message, data: userData } = response.data;
+
+      if (status === "success") {
+        const { username, email, profile, name } = userData;
+
+        dispatch(
+          userdata({
+            isAuthenticated: true,
+            username,
+            email,
+            profile,
+            name,
+          })
         );
-        console.log(res.data);
       }
-      form.reset();
+
+      setOtp("");
       setUpdateType(null);
-    } catch (err) {
-      form.setError("root", {
-        type: "manual",
-        message: "Invalid OTP. Please try again.",
-      });
+      toast.success(message, { position: "bottom-right" });
+    } catch (error: any) {
+      console.error(
+        "Error verifying OTP:",
+        error.response?.data || error.message
+      );
     }
   };
 
