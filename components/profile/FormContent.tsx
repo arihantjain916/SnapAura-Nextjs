@@ -185,10 +185,13 @@ export function FormContent({ className, ...props }: UserProfileType) {
       setUpdateType(null);
       toast.success(message, { position: "bottom-right" });
     } catch (error: any) {
-      console.error(
-        "Error verifying OTP:",
-        error.response?.data || error.message
-      );
+      const { status, message } = error.response?.data;
+      console.log(message ?? "ss");
+      if (status === "error") {
+        toast.error(message.username[0] ?? message.email[0], {
+          position: "bottom-right",
+        });
+      }
     }
   };
 
