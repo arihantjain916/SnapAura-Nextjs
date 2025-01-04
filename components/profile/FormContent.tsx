@@ -47,6 +47,11 @@ export function FormContent({ className, ...props }: UserProfileType) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [updateType, setUpdateType] = useState<"email" | "username" | null>(
+    null
+  );
 
   const form = useForm<UserProfileSchemaType>({
     resolver: zodResolver(userProfileSchema),
@@ -83,24 +88,44 @@ export function FormContent({ className, ...props }: UserProfileType) {
 
   const onSubmit = async (data: UserProfileSchemaType) => {
     try {
+      const authToken = Cookies.get("AUTH_TOKEN");
+      const headers = { Authorization: `Bearer ${authToken}` };
+
+      // Check for email or username changes
+      if (data.email !== email || data.username !== username) {
+        const updateField = data.email !== email ? "email" : "username";
+        const updateValue = form.getValues(updateField);
+
+        setUpdateType(updateField);
+        setIsModalOpen(true);
+
+        await AxiosInstance.post(
+          "/user/send/otp?_method=PUT",
+          {
+            [updateField]: updateValue,
+            field: updateField,
+          },
+          { headers }
+        );
+
+        return;
+      }
+
       const formData = new FormData();
       if (image) formData.append("profile", image);
-      // formData.append("username", data.username || "");
-      // formData.append("email", data.email || "");
       formData.append("name", data.name || "");
 
-      const res = await AxiosInstance.post(
+      const response = await AxiosInstance.post(
         "/user/update/profile?_method=PUT",
         formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("AUTH_TOKEN")}`,
-          },
-        }
+        { headers }
       );
 
-      if (res.data.status) {
-        const { username, email, profile, name } = res.data.data;
+      const { status, message, data: userData } = response.data;
+
+      if (status) {
+        const { username, email, profile, name } = userData;
+
         dispatch(
           userdata({
             isAuthenticated: true,
@@ -110,16 +135,47 @@ export function FormContent({ className, ...props }: UserProfileType) {
             name,
           })
         );
+
         form.reset({ email, username, name });
         setImage(null);
         setImageUrl(null);
-        toast.success(res.data.message, { position: "bottom-right" });
+        toast.success(message, { position: "bottom-right" });
       } else {
-        toast.warn(res.data.message, { position: "bottom-right" });
+        toast.warn(message, { position: "bottom-right" });
       }
     } catch (error: any) {
-      const message = error.response?.data?.message || "An error occurred.";
-      toast.error(message, { position: "bottom-right" });
+      const errorMessage =
+        error.response?.data?.message || "An error occurred.";
+      toast.error(errorMessage, { position: "bottom-right" });
+    }
+  };
+
+  const handleOTPVerification = async () => {
+    try {
+      setIsModalOpen(false);
+      if (updateType === "email") {
+        const res = await AxiosInstance.post(
+          "/user/send/otp?_method=PUT",
+          {
+            email: form.getValues("email"),
+            otp: otp,
+            field: "email",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("AUTH_TOKEN")}`,
+            },
+          }
+        );
+        console.log(res.data);
+      }
+      form.reset();
+      setUpdateType(null);
+    } catch (err) {
+      form.setError("root", {
+        type: "manual",
+        message: "Invalid OTP. Please try again.",
+      });
     }
   };
 
@@ -186,7 +242,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
                 />
                 {form.watch("email") !== email && (
                   <div className="flex justify-end mt-2">
-                    <UpdateInfo field="email" email={form.watch("email")} />
+                    {/* <UpdateInfo field="email" email={form.watch("email")} /> */}
                   </div>
                 )}
               </div>
@@ -228,7 +284,7 @@ export function FormContent({ className, ...props }: UserProfileType) {
                 />
                 {form.watch("username") !== username && (
                   <div className="flex justify-end mt-2">
-                    <UpdateInfo field="username" email={email} />
+                    {/* <UpdateInfo field="username" email={email} /> */}
                   </div>
                 )}
               </div>
@@ -249,6 +305,15 @@ export function FormContent({ className, ...props }: UserProfileType) {
             </div>
           </form>
         </Form>
+
+        <UpdateInfo
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          otp={otp}
+          setOtp={setOtp}
+          onVerify={handleOTPVerification}
+          updateType={updateType}
+        />
       </div>
     </>
   );
