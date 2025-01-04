@@ -24,6 +24,7 @@ interface OTPVerificationModalProps {
   updateType: "email" | "username" | null;
   // setIsOpen: (isOpen: boolean) => void;
 }
+import { REGEXP_ONLY_DIGITS } from "input-otp";
 
 export const UpdateInfo = ({
   isOpen,
@@ -34,7 +35,6 @@ export const UpdateInfo = ({
   updateType,
   // setIsOpen,
 }: OTPVerificationModalProps) => {
-
   return (
     <>
       <ToastContainer />
@@ -47,13 +47,10 @@ export const UpdateInfo = ({
               {updateType === "email" ? "Email" : "Username"}.
             </DialogDescription>
             <div className="mt-4">
-              <InputOTP maxLength={4} value={otp} onChange={setOtp}>
+              <InputOTP maxLength={4} value={otp} onChange={setOtp} pattern={REGEXP_ONLY_DIGITS}>
                 <InputOTPGroup>
                   <InputOTPSlot index={0} />
                   <InputOTPSlot index={1} />
-                </InputOTPGroup>
-                <InputOTPSeparator />
-                <InputOTPGroup>
                   <InputOTPSlot index={2} />
                   <InputOTPSlot index={3} />
                 </InputOTPGroup>
